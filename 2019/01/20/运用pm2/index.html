@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="js引擎的执行过程（一）, 个人博客,web前端">
+    <meta name="keywords" content="运用pm2, 个人博客,web前端">
     <meta name="description" content="个人博客">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>js引擎的执行过程（一） | 嘚儿驾驾</title>
+    <title>运用pm2 | 嘚儿驾驾</title>
     <link rel="icon" type="image/png" href="/medias/avatar.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -203,12 +203,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">js引擎的执行过程（一）</h1>
+                    <h1 class="description center-align post-title">运用pm2</h1>
                 </div>
             </div>
         </div>
@@ -324,8 +324,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/JavaScript/">
-                                <span class="chip bg-color">JavaScript</span>
+                            <a href="/tags/pm2/">
+                                <span class="chip bg-color">pm2</span>
                             </a>
                         
                     </div>
@@ -336,8 +336,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/JavaScript/" class="post-category">
-                                JavaScript
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                工具
                             </a>
                         
                     </div>
@@ -349,7 +349,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-12-20
+                    2019-01-20
                 </div>
                 
 
@@ -370,138 +370,49 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="js-引擎的执行过程（一）"><a href="#js-引擎的执行过程（一）" class="headerlink" title="js 引擎的执行过程（一）"></a><center>js 引擎的执行过程（一）</center></h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>js 是一种非常灵活的语言，理解 js 引擎的执行过程对我们学习 javascript 非常重要，但是网上讲解 js 引擎的文章也大多是浅尝辄止或者只局部分析，例如只分析事件循环（Event Loop）或者变量提升等等，并没有全面深入的分析其中过程。所以我一直想把 js 执行的详细过程整理成一个较为详细的知识体系，帮助我们理解和整体认识 js。<br>在分析之前我们先了解以下基础概念：</p>
-<ul>
-<li>javascript 是<strong>单线程语言</strong><br>在浏览器中一个页面永远只有一个线程在执行 js 脚本代码（在不主动开启新线程的情况下）。</li>
-<li>javascript 是单线程语言,但是代码解析却十分的快速，不会发生解析阻塞。</li>
-</ul>
-<p>javascript 是异步执行的，通过<strong>事件循环（Event Loop）</strong>的方式实现。<br>下面我们先通过一段较为简单的代码（暂不存在事件循环（Event Loop））来检验我们对 js 引擎执行过程的理解是否正确，如下：</p>
-<pre><code>    &lt;script&gt;
-        console.log(fun)
-        console.log(person)
-    &lt;/script&gt;
-    &lt;script&gt;
-        console.log(person)
-        console.log(fun)
-        var person = &quot;Eric&quot;;
-        console.log(person)
-        function fun() &#123;
-            console.log(person)
-            var person = &quot;Tom&quot;;
-            console.log(person)
-        &#125;
-        fun()
-        console.log(person)
-    &lt;/script&gt;</code></pre>
-<p>我们可以先分析上面的代码，按自己的理解分析输出的顺序是什么，然后在浏览器执行一次，结果一样的话，那么代表你已经对 js 引擎执行过程有了正确的理解；如果不是，则代表还存在模糊或者概念不清晰等问题。结果我们不在这里进行讨论，我们利用上面简单的例子全面分析 js 引擎执行过程，相信在理解该过程后我们就不难得出结果的，js 引擎执行过程分为三个阶段：</p>
-<ol>
-<li><strong>语法分析</strong></li>
-<li><strong>预编译阶段</strong></li>
-<li><strong>执行阶段</strong></li>
-</ol>
-<p>注：浏览器首先按顺序加载由&lt;<strong>script</strong>&gt;标签分割的 js 代码块，加载 js 代码块完毕后，立刻进入以上三个阶段，然后再按顺序查找下一个代码块，再继续执行以上三个阶段，无论是外部脚本文件（不异步加载）还是内部脚本代码块，都是一样的原理，并且都在同一个全局作用域中。</p>
-<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>js 脚本代码块加载完毕后，会首先进入语法分析阶段。该阶段主要作用是：<br>分析该 js 脚本代码块的语法是否正确，如果出现不正确，则向外抛出一个语法错误（SyntaxError），停止该 js 代码块的执行，然后继续查找并加载下一个代码块；如果语法正确，则进入预编译阶段<br>语法错误报错如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE1.jpeg"></p>
-<h3 id="预编译阶段"><a href="#预编译阶段" class="headerlink" title="预编译阶段"></a>预编译阶段</h3><p>js 代码块通过语法分析阶段后，语法正确则进入预编译阶段。在分析预编译阶段之前，我们先了解一下 js 的运行环境，运行环境主要有三种：</p>
-<ul>
-<li><strong>全局环境</strong>（JS 代码加载完毕后，进入代码预编译即进入全局环境）</li>
-<li><strong>函数环境</strong>（函数调用执行时，进入该函数环境，不同的函数则函数环境不同）</li>
-<li><strong>eval</strong>（不建议使用，会有安全，性能等问题）</li>
-</ul>
-<p>每进入一个不同的运行环境都会创建一个相应的<strong>执行上下文（Execution Context）</strong>，那么在一段 JS 程序中一般都会创建多个执行上下文，js 引擎会以栈的方式对这些执行上下文进行处理，形成<strong>函数调用栈（call stack）</strong>，栈底永远是全局执行上下文（Global Execution Context），栈顶则永远是当前执行上下文。</p>
-<h4 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h4><p>函数调用栈就是使用栈存取的方式进行管理运行环境，特点是<strong>先进后出，后进先出</strong>。<br>我们分析下段简单的 JS 脚本代码来理解函数调用栈：</p>
-<pre><code>    function bar() &#123;
-    var B_context = &quot;Bar EC&quot;;
-    function foo() &#123;
-        var f_context = &quot;foo EC&quot;;
-    &#125;
-    foo();
-    &#125;
-    bar();</code></pre>
-<p>上面的代码块通过语法分析后，进入预编译阶段，如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE2.png"></p>
-<ol>
-<li>首先进入全局环境，创建全局执行上下文（Global Execution Context），推入 stack 栈中</li>
-<li>调用 bar 函数，进入 bar 函数运行环境，创建 bar 函数执行上下文（bar Execution Context），推入 stack 栈中</li>
-<li>在 bar 函数内部调用 foo 函数，则再进入 foo 函数运行环境，创建 foo 函数执行上下文（foo Execution Context），推入 stack 栈中</li>
-<li>此刻栈底是全局执行上下文（Global Execution Context），栈顶是 foo 函数执行上下文（foo Execution Context），如上图，由于 foo 函数内部没有再调用其他函数，那么则开始出栈</li>
-<li>foo 函数执行完毕后，栈顶 foo 函数执行上下文（foo Execution Context）首先出栈</li>
-<li>bar 函数执行完毕，bar 函数执行上下文（bar Execution Context）出栈</li>
-<li>Global Execution Context 则在浏览器或者该标签页关闭时出栈。</li>
-</ol>
-<p>注：不同的运行环境执行都会进入代码预编译和执行两个阶段，语法分析则在代码块加载完毕时统一检验语法</p>
-<h4 id="创建执行上下文"><a href="#创建执行上下文" class="headerlink" title="创建执行上下文"></a>创建执行上下文</h4><p>执行上下文可理解为当前的执行环境，与该运行环境相对应。创建执行上下文的过程中，主要做了以下三件事件，如图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE3.jpeg"><br><strong>1.创建变量对象（Variable Object）</strong><br><strong>2.建立作用域链（Scope Chain）</strong><br><strong>3.确定 this 的指向</strong></p>
-<h4 id="创建变量对象"><a href="#创建变量对象" class="headerlink" title="创建变量对象"></a>创建变量对象</h4><p>创建变量对象主要经过以下几个过程，如图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE4.jpeg"></p>
-<ol>
-<li>创建 arguments 对象，检查当前上下文中的参数，建立该对象的属性与属性值，仅在函数环境(非箭头函数)中进行，全局环境没有此过程</li>
-<li>检查当前上下文的函数声明，按代码顺序查找，将找到的函数提前声明，如果当前上下文的变量对象没有该函数名属性，则在该变量对象以函数名建立一个属性，属性值则为指向该函数所在堆内存地址的引用，如果存在，则会被新的引用覆盖。</li>
-<li>检查当前上下文的变量声明，按代码顺序查找，将找到的变量提前声明，如果当前上下文的变量对象没有该变量名属性，则在该变量对象以变量名建立一个属性，属性值为 undefined；如果存在，则忽略该变量声明</li>
-</ol>
-<p>注：在全局环境中，window 对象就是全局执行上下文的变量对象，所有的变量和函数都是 window 对象的属性方法。<br>所以函数声明提前和变量声明提升是在创建变量对象中进行的，且函数声明优先级高于变量声明。<br>我们分析一段简单的代码，帮助我们理解该过程，如下：</p>
-<pre><code>    function fun(a, b) &#123;
-    var num = 1;
-    function test() &#123;
-        console.log(num);
-    &#125;
-    &#125;
-    fun(2, 3);</code></pre>
-<p>这里我们在全局环境调用 fun 函数，创建 fun 执行上下文，这里为了方便大家理解，暂时不讲解作用域链以及 this 指向，如下：</p>
-<pre><code>    funEC = &#123;
-    //变量对象
-    VO: &#123;
-        //arguments对象
-        arguments: &#123;
-        a: undefined,
-        b: undefined,
-        length: 2,
-        &#125;,
+                <p>Installing PM2<br>With NPM:</p>
+<pre><code>    $ npm install pm2 -g</code></pre>
+<p>Or if you don’t have Node.js installed:</p>
+<pre><code>    wget -qO- https://getpm2.com/install.sh | bash</code></pre>
+<p>Start an application<br>You can start any application (Node.js, Python, Ruby, binaries in $PATH…) like that:</p>
+<pre><code>    $ pm2 start app.js</code></pre>
+<p>Your app is now daemonized, monitored and kept alive forever.<br>More about Process Management<br>Managing Applications<br>Once applications are started you can manage them easily:</p>
+<p>To list all running applications:</p>
+<pre><code>    $ pm2 list</code></pre>
+<p>Managing apps is straightforward:</p>
+<pre><code>    $ pm2 stop &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;
+    $ pm2 restart &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;
+    $ pm2 delete &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;</code></pre>
+<p>To have more details on a specific application:</p>
+<pre><code>    $ pm2 describe &lt;id|app_name&gt;</code></pre>
+<p>To monitor logs, custom metrics, application information:</p>
+<pre><code>    $ pm2 monit</code></pre>
+<p>More about Application Management<br>Cluster Mode: Node.js Load Balancing &amp; Zero Downtime Reload<br>The Cluster mode is a special mode when starting a Node.js application, it starts multiple processes and load-balance HTTP/TCP/UDP queries between them. This increase overall performance (by a factor of x10 on 16 cores machines) and reliability (faster socket re-balancing in case of unhandled errors).<br>Starting a Node.js application in cluster mode that will leverage all CPUs available:</p>
+<pre><code>    $ pm2 start api.js -i &lt;processes&gt;</code></pre>
+<p>&lt;processes&gt; can be ‘max’, -1 (all cpu minus 1) or a specified number of instances to start.<br>Zero Downtime Reload<br>Hot Reload allows to update an application without any downtime:</p>
+<pre><code>    $ pm2 reload all</code></pre>
+<p>Seamlessly supported by all major Node.js frameworks and any Node.js applications without any code change:<br>More informations about how PM2 make clustering easy<br>Container Support<br>With the drop-in replacement command for node, called pm2-runtime, run your Node.js application in a hardened production environment. Using it is seamless:<br>RUN npm install pm2 -g<br>CMD [ “pm2-runtime”, “npm”, “–”, “start” ]</p>
+<p>Read More about the dedicated integration<br>Terminal Based Monitoring<br>Monitor all processes launched straight from the command line:</p>
+<pre><code>    $ pm2 monit</code></pre>
+<p>Log Management<br>To consult logs just type the command:</p>
+<pre><code>    $ pm2 logs</code></pre>
+<p>Standard, Raw, JSON and formated output are available.<br>Examples:</p>
+<pre><code>    $ pm2 logs APP-NAME # Display APP-NAME logs
+    $ pm2 logs --json # JSON output
+    $ pm2 logs --format # Formated output
 
-        //test函数
-        test: &lt;test reference&gt;,
-
-        //num变量
-        num: undefined,
-    &#125;,
-    //作用域链
-    scopeChain: [],
-
-    //this指向
-    this: window,
-    &#125;;</code></pre>
-<ul>
-<li>funEC 表示 fun 函数的执行上下文（fun Execution Context 简写为 funEC）</li>
-<li>funE 的变量对象中 arguments 属性，上面的写法仅为了方便大家理解，但是在浏览器中展示是以类数组的方式展示的</li>
-<li>&lt;test reference&gt;表示 test 函数在堆内存地址的引用</li>
-</ul>
-<p>注：创建变量对象发生在预编译阶段，但尚未进入执行阶段，该变量对象都是不能访问的，因为此时的变量对象中的变量属性尚未赋值，值仍为 undefined，只有进入执行阶段，变量对象中的变量属性进行赋值后，变量对象（Variable Object）转为活动对象（Active Object）后，才能进行访问，这个过程就是 VO –&gt; AO 过程。</p>
-<h4 id="建立作用域链"><a href="#建立作用域链" class="headerlink" title="建立作用域链"></a>建立作用域链</h4><p><strong>作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，它保证了当前执行环境对符合访问权限的变量和函数的有序访问。</strong><br>理清作用域链可以帮助我们理解 js 很多问题包括闭包问题等，下面我们结合一个简单的例子来理解作用域链，如下：</p>
-<pre><code>    var num = 30;
-    function test() &#123;
-    var a = 10;
-    function innerTest() &#123;
-        var b = 20;
-        return a + b;
-    &#125;
-    innerTest();
-    &#125;
-    test();</code></pre>
-<p>在上面的例子中，当执行到调用 innerTest 函数，进入 innerTest 函数环境。全局执行上下文和 test 函数执行上下文已进入执行阶段，innerTest 函数执行上下文在预编译阶段创建变量对象，所以他们的活动对象和变量对象分别是 AO(global)，AO(test)和 VO(innerTest)，而 innerTest 的作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，如下：<br>innerTestEC = { //变量对象 VO: {b: undefined}, //作用域链 scopeChain: [VO(innerTest), AO(test), AO(global)], //this 指向 this: window}<br>我们这里直接使用数组表示作用域链，作用域链的活动对象或变量对象可以直接理解为作用域。<br>作用域链的第一项永远是当前作用域（当前上下文的变量对象或活动对象）；<br>最后一项永远是全局作用域（全局执行上下文的活动对象）；<br>作用域链保证了变量和函数的有序访问，查找方式是沿着作用域链从左至右查找变量或函数，找到则会停止查找，找不到则一直查找到全局作用域，再找不到则会抛出引用错误。<br>在这里我们顺便思考一下，什么是闭包？<br>我们先看下面一个简单例子，如下：</p>
-<pre><code>    function foo() &#123;
-    var num = 20;
-    function bar() &#123;
-        var result = num + 20;
-        return result;
-    &#125;
-    bar();
-    &#125;
-    foo();</code></pre>
-<p>因为对于闭包有很多不同的理解，包括我看的一些书籍(例如 js 高级程序设计)，我这里直接以浏览器解析，以浏览器理解的闭包为准来分析闭包，如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE5.jpeg"><br>如上图所示，chrome 浏览器理解闭包是 foo，那么按浏览器的标准是如何定义闭包的，我总结为三点：</p>
-<ul>
-<li><strong>在函数内部定义新函数</strong></li>
-<li><strong>新函数访问外层函数的局部变量，即访问外层函数环境的活动对象属性</strong></li>
-<li><strong>新函数执行，创建新的函数执行上下文，外层函数即为闭包</strong></li>
-</ul>
-<hr>
-<p><strong>确定 this 指向</strong><br>在全局环境下，全局执行上下文中变量对象的 this 属性指向为 window；函数环境下的 this 指向却较为灵活，需根据执行环境和执行方法确定，需要举大量的典型例子概括，本文先不做分析。</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>由于涉及的内容过多，这里将第三个阶段（<strong>执行阶段</strong>）单独分离出来。另开新文章进行详细分析，下篇文章主要介绍 js 执行阶段中的同步任务执行和异步任务执行机制（<strong>事件循环（Event Loop）</strong>）</p>
+    $ pm2 flush # Flush all logs
+    $ pm2 reloadLogs # Reload all logs</code></pre>
+<p>More about log management<br>Startup Scripts Generation<br>PM2 can generates and configure a Startup Script to keep PM2 and your processes alive at every server restart.<br>Init Systems Supported: systemd, upstart, launchd, rc.d</p>
+<h1 id="Generate-Startup-Script"><a href="#Generate-Startup-Script" class="headerlink" title="Generate Startup Script"></a>Generate Startup Script</h1><pre><code>    $ pm2 startup</code></pre>
+<h1 id="Freeze-your-process-list-across-server-restart"><a href="#Freeze-your-process-list-across-server-restart" class="headerlink" title="Freeze your process list across server restart"></a>Freeze your process list across server restart</h1><pre><code>    $ pm2 save</code></pre>
+<h1 id="Remove-Startup-Script"><a href="#Remove-Startup-Script" class="headerlink" title="Remove Startup Script"></a>Remove Startup Script</h1><pre><code>    $ pm2 unstartup</code></pre>
+<p>More about Startup Scripts Generation<br>PM2 Modules<br>PM2 embeds a simple and powerful module system. Installing a module is straightforward:</p>
+<pre><code>    $ pm2 install &lt;module_name&gt;</code></pre>
+<p>Here are some PM2 compatible modules (standalone Node.js applications managed by PM2):<br>pm2-logrotate automatically rotate logs and limit logs size<br>pm2-server-monit monitor the current server with more than 20+ metrics and 8 actions<br>Updating PM2</p>
+<h1 id="Install-latest-PM2-version"><a href="#Install-latest-PM2-version" class="headerlink" title="Install latest PM2 version"></a>Install latest PM2 version</h1><pre><code>    $ npm install pm2@latest -g</code></pre>
+<h1 id="Save-process-list-exit-old-PM2-amp-restore-all-processes"><a href="#Save-process-list-exit-old-PM2-amp-restore-all-processes" class="headerlink" title="Save process list, exit old PM2 &amp; restore all processes"></a>Save process list, exit old PM2 &amp; restore all processes</h1><pre><code>    $ pm2 update</code></pre>
+<p>PM2 updates are seamless</p>
 
                 
             </div>
@@ -516,8 +427,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/JavaScript/">
-                                    <span class="chip bg-color">JavaScript</span>
+                                <a href="/tags/pm2/">
+                                    <span class="chip bg-color">pm2</span>
                                 </a>
                             
                         </div>
@@ -562,13 +473,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/01/20/Linux%E5%AE%89%E8%A3%85nvm/">
+                <a href="/2019/01/20/Linux%E4%B8%8Bmysql%E5%AE%89%E8%A3%85/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Linux上安装nvm">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Linux下mysql安装">
                         
-                        <span class="card-title">Linux上安装nvm</span>
+                        <span class="card-title">Linux下mysql安装</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -596,8 +507,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/nvm/">
-                        <span class="chip bg-color">nvm</span>
+                    <a href="/tags/mysql/">
+                        <span class="chip bg-color">mysql</span>
                     </a>
                     
                 </div>
@@ -611,13 +522,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/06/28/hello-world/">
+                <a href="/2019/01/20/Linux%E5%AE%89%E8%A3%85nvm/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Linux上安装nvm">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Linux上安装nvm</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -628,14 +539,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-06-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-01-20
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Hexo/" class="post-category">
-                                    Hexo
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    工具
                                 </a>
                             
                             
@@ -645,8 +556,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Hexo/">
-                        <span class="chip bg-color">Hexo</span>
+                    <a href="/tags/nvm/">
+                        <span class="chip bg-color">nvm</span>
                     </a>
                     
                 </div>
