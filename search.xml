@@ -4,6 +4,64 @@
   
     
     <entry>
+      <title>运用pm2</title>
+      <link href="2020/12/20/%E8%BF%90%E7%94%A8pm2/"/>
+      <url>2020/12/20/%E8%BF%90%E7%94%A8pm2/</url>
+      
+        <content type="html"><![CDATA[<p>Installing PM2<br>With NPM:</p><pre><code>    $ npm install pm2 -g</code></pre><p>Or if you don’t have Node.js installed:</p><pre><code>    wget -qO- https://getpm2.com/install.sh | bash</code></pre><p>Start an application<br>You can start any application (Node.js, Python, Ruby, binaries in $PATH…) like that:</p><pre><code>    $ pm2 start app.js</code></pre><p>Your app is now daemonized, monitored and kept alive forever.<br>More about Process Management<br>Managing Applications<br>Once applications are started you can manage them easily:</p><p>To list all running applications:</p><pre><code>    $ pm2 list</code></pre><p>Managing apps is straightforward:</p><pre><code>    $ pm2 stop &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;    $ pm2 restart &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;    $ pm2 delete &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;</code></pre><p>To have more details on a specific application:</p><pre><code>    $ pm2 describe &lt;id|app_name&gt;</code></pre><p>To monitor logs, custom metrics, application information:</p><pre><code>    $ pm2 monit</code></pre><p>More about Application Management<br>Cluster Mode: Node.js Load Balancing &amp; Zero Downtime Reload<br>The Cluster mode is a special mode when starting a Node.js application, it starts multiple processes and load-balance HTTP/TCP/UDP queries between them. This increase overall performance (by a factor of x10 on 16 cores machines) and reliability (faster socket re-balancing in case of unhandled errors).<br>Starting a Node.js application in cluster mode that will leverage all CPUs available:</p><pre><code>    $ pm2 start api.js -i &lt;processes&gt;</code></pre><p>&lt;processes&gt; can be ‘max’, -1 (all cpu minus 1) or a specified number of instances to start.<br>Zero Downtime Reload<br>Hot Reload allows to update an application without any downtime:</p><pre><code>    $ pm2 reload all</code></pre><p>Seamlessly supported by all major Node.js frameworks and any Node.js applications without any code change:<br>More informations about how PM2 make clustering easy<br>Container Support<br>With the drop-in replacement command for node, called pm2-runtime, run your Node.js application in a hardened production environment. Using it is seamless:<br>RUN npm install pm2 -g<br>CMD [ “pm2-runtime”, “npm”, “–”, “start” ]</p><p>Read More about the dedicated integration<br>Terminal Based Monitoring<br>Monitor all processes launched straight from the command line:</p><pre><code>    $ pm2 monit</code></pre><p>Log Management<br>To consult logs just type the command:</p><pre><code>    $ pm2 logs</code></pre><p>Standard, Raw, JSON and formated output are available.<br>Examples:</p><pre><code>    $ pm2 logs APP-NAME # Display APP-NAME logs    $ pm2 logs --json # JSON output    $ pm2 logs --format # Formated output    $ pm2 flush # Flush all logs    $ pm2 reloadLogs # Reload all logs</code></pre><p>More about log management<br>Startup Scripts Generation<br>PM2 can generates and configure a Startup Script to keep PM2 and your processes alive at every server restart.<br>Init Systems Supported: systemd, upstart, launchd, rc.d</p><h1 id="Generate-Startup-Script"><a href="#Generate-Startup-Script" class="headerlink" title="Generate Startup Script"></a>Generate Startup Script</h1><pre><code>    $ pm2 startup</code></pre><h1 id="Freeze-your-process-list-across-server-restart"><a href="#Freeze-your-process-list-across-server-restart" class="headerlink" title="Freeze your process list across server restart"></a>Freeze your process list across server restart</h1><pre><code>    $ pm2 save</code></pre><h1 id="Remove-Startup-Script"><a href="#Remove-Startup-Script" class="headerlink" title="Remove Startup Script"></a>Remove Startup Script</h1><pre><code>    $ pm2 unstartup</code></pre><p>More about Startup Scripts Generation<br>PM2 Modules<br>PM2 embeds a simple and powerful module system. Installing a module is straightforward:</p><pre><code>    $ pm2 install &lt;module_name&gt;</code></pre><p>Here are some PM2 compatible modules (standalone Node.js applications managed by PM2):<br>pm2-logrotate automatically rotate logs and limit logs size<br>pm2-server-monit monitor the current server with more than 20+ metrics and 8 actions<br>Updating PM2</p><h1 id="Install-latest-PM2-version"><a href="#Install-latest-PM2-version" class="headerlink" title="Install latest PM2 version"></a>Install latest PM2 version</h1><pre><code>    $ npm install pm2@latest -g</code></pre><h1 id="Save-process-list-exit-old-PM2-amp-restore-all-processes"><a href="#Save-process-list-exit-old-PM2-amp-restore-all-processes" class="headerlink" title="Save process list, exit old PM2 &amp; restore all processes"></a>Save process list, exit old PM2 &amp; restore all processes</h1><pre><code>    $ pm2 update</code></pre><p>PM2 updates are seamless</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+          <category> 软件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 软件 </tag>
+            
+            <tag> pm2 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux上安装nvm</title>
+      <link href="2020/12/20/Linux%E5%AE%89%E8%A3%85nvm/"/>
+      <url>2020/12/20/Linux%E5%AE%89%E8%A3%85nvm/</url>
+      
+        <content type="html"><![CDATA[<p>第一步安装</p><p>curl -o- <a href="https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh">https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh</a> | bash</p><p>第二步</p><p>export NVM_DIR=”${XDG_CONFIG_HOME/:-$HOME/.}nvm”<br>[ -s “$NVM_DIR/nvm.sh” ] &amp;&amp; . “$NVM_DIR/nvm.sh” # This loads nvm</p><p>第三步：</p><p>nvm –version</p><p>出现版本号表示安装成功<br>安装 node<br>安装 node</p><p>nvm install v10.16.0</p><p>nvm use 版本号<br>nvm alias default v*<em>.**.\</em> 更改默认开机版本</p><p>若下载不了<br>则用 git clone<br>cd nvm<br>./install.sh</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+          <category> 软件 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> nvm </tag>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>js引擎的执行过程（一）</title>
       <link href="2018/12/20/js%E5%BC%95%E6%93%8E%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/"/>
       <url>2018/12/20/js%E5%BC%95%E6%93%8E%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/</url>
