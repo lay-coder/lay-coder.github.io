@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>vuex随记</title>
+      <link href="2020/12/22/vuex%E9%9A%8F%E8%AE%B0/"/>
+      <url>2020/12/22/vuex%E9%9A%8F%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<ol><li>mapState 不生效问题<br>mapState 只能映射 store 的根状态树，modules 内的状态不映射</li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> vuex </tag>
+            
+            <tag> 笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>你不知道的js（上卷）</title>
       <link href="2020/12/20/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%E5%8D%B7%EF%BC%89/"/>
       <url>2020/12/20/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%E5%8D%B7%EF%BC%89/</url>
