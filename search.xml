@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>js任务队列</title>
+      <link href="2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97/"/>
+      <url>2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97/</url>
+      
+        <content type="html"><![CDATA[<h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p><p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p><pre><code>    class TaskQueue &#123;        #count;        #taskList = [];        #waitList = [];        constructor(count) &#123;            this.#count = count;            setTimeout(this.#runTask.bind(this), 0);        &#125;        subscribe(task) &#123;            if (this.#check()) &#123;                this.#taskList.push(task);            &#125; else &#123;                this.#waitList.push(task);            &#125;        &#125;        #check() &#123;            return this.#taskList.length &lt; this.#count;        &#125;        #runTask() &#123;            if (this.#taskList.length === 0) return;            this.#taskList.forEach((i) =&gt; &#123;                try &#123;                    const task = this.#taskList.shift();                    task().then((value) =&gt; &#123;                        console.log(value);                    &#125;);                &#125; finally &#123;                    this.#moveTask();                    this.#runTask();                &#125;            &#125;);        &#125;        #moveTask() &#123;            if (this.#waitList.length === 0) return;            this.#taskList.push(this.#waitList.shift());        &#125;    &#125;    const taskQueue = new TaskQueue(2);    const task = (index) =&gt; &#123;        return new Promise((resolve, reject) =&gt; &#123;            setTimeout(() =&gt; &#123;                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);            &#125;, 2000)        &#125;);    &#125;;    for (let index = 0; index &lt; 8; index++) &#123;        taskQueue.subscribe(task.bind(this, index));    &#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vuex随记</title>
       <link href="2020/12/22/vuex%E9%9A%8F%E8%AE%B0/"/>
       <url>2020/12/22/vuex%E9%9A%8F%E8%AE%B0/</url>
