@@ -8,13 +8,15 @@
       <link href="2020/12/26/git%E7%A7%81%E6%9C%8D-hexo%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/"/>
       <url>2020/12/26/git%E7%A7%81%E6%9C%8D-hexo%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/</url>
       
-        <content type="html"><![CDATA[<p>搭建 Git 服务器</p><h5 id="一、-安装-Git"><a href="#一、-安装-Git" class="headerlink" title="一、 安装 Git"></a>一、 安装 Git</h5><pre><code>    $ yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel    $ yum install git</code></pre><p>创建一个 git 用户组和用户，用来运行 git 服务</p><pre><code>    $ groupadd git    $ useradd git -g git</code></pre><p>创建证书登录</p><pre><code>    $ cd /home/git/    $ mkdir .ssh    $ chmod 755 .ssh    $ touch .ssh/authorized_keys    $ chmod 644 .ssh/authorized_keys</code></pre><p>初始化 git 仓库</p><pre><code>    $ cd /home    $ mkdir gitrepo    $ chown git:git gitrepo/    $ cd gitrepo    $ git init --bare ***.git // 建立裸仓库    Initialized empty Git repository in /home/gitrepo/***.git/</code></pre><p>把仓库所属用户改为 git</p><pre><code>    $ chown -R git:git ***.git</code></pre><p>仓库地址：<strong>git@{你的ip地址或域名}:/home/gitrepo/***.git</strong></p>]]></content>
+        <content type="html"><![CDATA[<p>搭建 Git 服务器</p><h5 id="一、-安装-Git"><a href="#一、-安装-Git" class="headerlink" title="一、 安装 Git"></a>一、 安装 Git</h5><pre><code>    $ yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel    $ yum install git</code></pre><p>创建一个 git 用户组和用户，用来运行 git 服务</p><pre><code>    $ groupadd git    $ useradd git -g git    $ password git // 为git用户设置密码</code></pre><p>创建证书登录</p><pre><code>    $ cd /home/git/    $ mkdir .ssh    $ chmod 755 .ssh    $ touch .ssh/authorized_keys    $ chmod 644 .ssh/authorized_keys</code></pre><p>初始化 git 仓库</p><pre><code>    $ cd /home    $ mkdir gitrepo    $ chown git:git gitrepo/    $ cd gitrepo    $ git init --bare ***.git // 建立裸仓库    Initialized empty Git repository in /home/gitrepo/***.git/</code></pre><p>把仓库所属用户改为 git</p><pre><code>    $ chown -R git:git ***.git</code></pre><p>仓库地址：<strong>git@{你的 ip 地址或域名}:/home/gitrepo/***.git</strong><br>使用 git hoosk 同步网页<br>使用 post-receive 钩子，当 git 有收发的时候就会调用此钩子<br>在裸库的 hooks 文件夹中，新建 post-receive 文件</p><pre><code>    vim /home/gitrepo/\*\*\*.git/hooks/post-receive    #!/bin/sh    GIT_REPO=/home/gitrepo/hexo-blog.git # git 仓库    TMP_GIT_CLONE=/tmp/hexo    PUBLIC_WWW=/usr/local/nginx/hexo-blog # 网站目录    rm -rf $&#123;TMP_GIT_CLONE&#125;    git clone $GIT_REPO $TMP_GIT_CLONE    rm -rf $&#123;PUBLIC_WWW&#125;/_    cp -rf $&#123;TMP_GIT_CLONE&#125;/_ $&#123;PUBLIC_WWW&#125;</code></pre><p>保存后，赋予可执行权限</p><pre><code>    chmod +x /home/gitrepo/hexo-blog.git/hooks/post-receive</code></pre><p>之后就正常的 nginx 作为 web 服务器就可以了</p>]]></content>
       
       
       
         <tags>
             
             <tag> Hexo </tag>
+            
+            <tag> Git </tag>
             
         </tags>
       
@@ -27,13 +29,19 @@
       <link href="2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97/"/>
       <url>2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97/</url>
       
-        <content type="html"><![CDATA[<h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p><p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p><pre><code>    class TaskQueue &#123;        #count;        #taskList = [];        #waitList = [];        constructor(count) &#123;            this.#count = count;            setTimeout(this.#runTask.bind(this), 0);        &#125;        subscribe(task) &#123;            if (this.#check()) &#123;                this.#taskList.push(task);            &#125; else &#123;                this.#waitList.push(task);            &#125;        &#125;        #check() &#123;            return this.#taskList.length &lt; this.#count;        &#125;        #runTask() &#123;            if (this.#taskList.length === 0) return;            this.#taskList.forEach((i) =&gt; &#123;                try &#123;                    const task = this.#taskList.shift();                    task().then((value) =&gt; &#123;                        console.log(value);                    &#125;);                &#125; finally &#123;                    this.#moveTask();                    this.#runTask();                &#125;            &#125;);        &#125;        #moveTask() &#123;            if (this.#waitList.length === 0) return;            this.#taskList.push(this.#waitList.shift());        &#125;    &#125;    const taskQueue = new TaskQueue(2);    const task = (index) =&gt; &#123;        return new Promise((resolve, reject) =&gt; &#123;            setTimeout(() =&gt; &#123;                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);            &#125;, 2000)        &#125;);    &#125;;    for (let index = 0; index &lt; 8; index++) &#123;        taskQueue.subscribe(task.bind(this, index));    &#125;</code></pre>]]></content>
+        <content type="html"><![CDATA[<h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p><p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p><pre><code>    class TaskQueue &#123;        #count;        #taskList = [];        #waitList = [];        constructor(count) &#123;            this.#count = count;            setTimeout(this.#runTask.bind(this), 0);        &#125;        subscribe(task) &#123;            if (this.#check()) &#123;                this.#taskList.push(task);            &#125; else &#123;                this.#waitList.push(task);            &#125;        &#125;        #check() &#123;            return this.#taskList.length &lt; this.#count;        &#125;        #runTask() &#123;            if (this.#taskList.length === 0) return;            this.#taskList.forEach((i) =&gt; &#123;                try &#123;                    const task = this.#taskList.shift();                    task().then((value) =&gt; &#123;                        console.log(value);                    &#125;);                &#125; finally &#123;                    this.#moveTask();                    this.#runTask();                &#125;            &#125;);        &#125;        #moveTask() &#123;            if (this.#waitList.length === 0) return;            this.#taskList.push(this.#waitList.shift());        &#125;    &#125;    // 测试下    const taskQueue = new TaskQueue(2);    const task = (index) =&gt; &#123;        return new Promise((resolve, reject) =&gt; &#123;            setTimeout(() =&gt; &#123;                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);            &#125;, 2000)        &#125;);    &#125;;    for (let index = 0; index &lt; 8; index++) &#123;        taskQueue.subscribe(task.bind(this, index));    &#125;</code></pre>]]></content>
       
+      
+      <categories>
+          
+          <category> JavaScript </category>
+          
+      </categories>
       
       
         <tags>
             
-            <tag> JavaScript </tag>
+            <tag> 面试题 </tag>
             
         </tags>
       
@@ -97,7 +105,7 @@
       
       <categories>
           
-          <category> 面试题 </category>
+          <category> HTTP </category>
           
       </categories>
       
