@@ -401,7 +401,11 @@
         branch: master</code></pre>
 <h5 id="上传一次后，到想放的文件夹内-git-clone"><a href="#上传一次后，到想放的文件夹内-git-clone" class="headerlink" title="上传一次后，到想放的文件夹内 git clone"></a>上传一次后，到想放的文件夹内 git clone</h5><pre><code>    cd /usr/local/nginx/hexo-blog
     git clone http://laycoder.com:10080/zhangnan/hexo-blog.git
-    git config credential.helper store  // 登录一次后，后续可免密登录</code></pre>
+    git config credential.helper store  // 登录一次后，后续可免密登录
+    或在.git下的config内
+    [remote &quot;origin&quot;]
+            url = http://&#123;user&#125;:&#123;password&#125;@laycoder.com:10080/zhangnan/hexo-blog.git
+            fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
 <h5 id="正常的-Nginx-web-服务器"><a href="#正常的-Nginx-web-服务器" class="headerlink" title="正常的 Nginx web 服务器"></a>正常的 Nginx web 服务器</h5><pre><code>    listen       443 ssl;
     server_name  www.laycoder.com;
     ssl_certificate      1_www.laycoder.com_bundle.crt;
