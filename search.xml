@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Window对象</title>
+      <link href="2020/12/28/Window%E5%AF%B9%E8%B1%A1/"/>
+      <url>2020/12/28/Window%E5%AF%B9%E8%B1%A1/</url>
+      
+        <content type="html"><![CDATA[<ol><li>btoa() 方法用于创建一个 base-64 编码的字符串。<br>该方法使用 “A-Z”, “a-z”, “0-9”, “+”, “/“ 和 “=” 字符来编码字符串。</li><li>base-64 解码使用方法是 atob() 。</li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 浏览器 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>js任务队列模拟</title>
+      <link href="2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97%E6%A8%A1%E6%8B%9F/"/>
+      <url>2020/12/26/js%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97%E6%A8%A1%E6%8B%9F/</url>
+      
+        <content type="html"><![CDATA[<h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p><p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p><pre><code>    class TaskQueue &#123;        #count;        #taskList = [];        #waitList = [];        constructor(count) &#123;            this.#count = count;            setTimeout(this.#runTask.bind(this), 0);        &#125;        subscribe(task) &#123;            if (this.#check()) &#123;                this.#taskList.push(task);            &#125; else &#123;                this.#waitList.push(task);            &#125;        &#125;        #check() &#123;            return this.#taskList.length &lt; this.#count;        &#125;        #runTask() &#123;            if (this.#taskList.length === 0) return;            this.#taskList.forEach((i) =&gt; &#123;                try &#123;                    const task = this.#taskList.shift();                    task().then((value) =&gt; &#123;                        console.log(value);                    &#125;);                &#125; finally &#123;                    this.#moveTask();                    this.#runTask();                &#125;            &#125;);        &#125;        #moveTask() &#123;            if (this.#waitList.length === 0) return;            this.#taskList.push(this.#waitList.shift());        &#125;    &#125;    // 测试下    const taskQueue = new TaskQueue(2);    const task = (index) =&gt; &#123;        return new Promise((resolve, reject) =&gt; &#123;            setTimeout(() =&gt; &#123;                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);            &#125;, 2000)        &#125;);    &#125;;    for (let index = 0; index &lt; 8; index++) &#123;        taskQueue.subscribe(task.bind(this, index));    &#125;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> JavaScript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>vuex随记</title>
+      <link href="2020/12/22/vuex%E9%9A%8F%E8%AE%B0/"/>
+      <url>2020/12/22/vuex%E9%9A%8F%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<ol><li>mapState 不生效问题<br>mapState 只能映射 store 的根状态树，modules 内的状态不映射</li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 笔记 </tag>
+            
+            <tag> vuex </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>你不知道的js（上卷）</title>
+      <link href="2020/12/20/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%E5%8D%B7%EF%BC%89/"/>
+      <url>2020/12/20/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%E5%8D%B7%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h2 id="第一部分：作用域和闭包"><a href="#第一部分：作用域和闭包" class="headerlink" title="第一部分：作用域和闭包"></a>第一部分：作用域和闭包</h2><h3 id="第-1-章：作用域是什么"><a href="#第-1-章：作用域是什么" class="headerlink" title="第 1 章：作用域是什么"></a>第 1 章：作用域是什么</h3><p>大部分语言编译器编译原理:<br>① 分词/词法分析<br>② 解析/语法分析<br>③ 代码生成<br>LHS 查询：变量出现在左侧时，<br>RHS 查询：所有非左侧时<br><strong>小结:</strong><br>1、作用域是一套规则，用于确定在何处以及如何查找变量（标识符）。如果查找的目的是对变量进行赋值，那么就会示用 LHS 查询，如果目的是获取变量的值，就会使用 RHS 查询。赋值操作符会导致 LHS 查询。=操作符或调用函数时传入参数的操作都会导致关联作用域的赋值操作。<br>2、JavaScript 引擎首先会在代码执行前对其进行编译，在这个过程中，像 var a = 2 这样的声明会被分解成两个独立的步骤；</p><ol><li> 首先，var a 在其作用域中声明新变量，这会在最开始的阶段，也就是代码执行前进行。</li><li> 接下来，a = 2 会查询（LHS 查询）变量 a 并对其进行赋值。</li></ol><p>3、LHS 和 RHS 查询都会在当前执行作用域中开始，如果有需要（也就是说它们没有找到所需的标识符），就会向上级作用域继续查找目标标识符，这样每次上升一级作用域，最后抵达全局作用域，无论找到或没找到都将停止。<br>4、不成功的 RHS 引用会导致抛出 Reference Error 异常。不成功的 LHS 引用会导致自动隐式地创建一个全局变量（非严格模式下），该变量使用 LHS 引用的目标作为标识符，或者抛出 Reference Error 异常（严格模式下）。</p><h3 id="第-2-章：词法作用域"><a href="#第-2-章：词法作用域" class="headerlink" title="第 2 章：词法作用域"></a>第 2 章：词法作用域</h3><p>作用域查找：<br>&emsp;&emsp;作用域查找会在找到第一个匹配的标识符时停止。在多层的嵌套作用域中可以定义同名的标识符，这叫作“遮蔽效应”（内部的标识符“遮蔽”了外部的标识符）。抛开遮蔽效应，作用域查找始终从运行时所处的最内部作用域开始，逐级向外或者向上进行，直到遇见第一个匹配的标识符为止。<br>&emsp;&emsp;全局变量会自动成为全局对象（比如浏览器中的 window 对象）的属性，因此可以不直接通过全局对象的词法名称，而是间接地通过对全局对象属性的引用来对其进行访问。<br>欺骗词法：<br>&emsp;&emsp;欺骗词法作用域会导致性能下降<br>&emsp;&emsp;eval(…)函数可以接受一个字符串为参数，并将其中的内容视为好像在书写时就在于程序中这个位置的代码<br>&emsp;&emsp;with 可以将一个没有或有多个属性的对象处理为一个完全隔离的词法作用域，因此这个对象的属性也会被处理为定义在这个作用域中的词法标识符。<br>&emsp;&emsp;尽管 with 块可以将一个对象处理为词法作用域，但是这个块内部正常的 var 声明并不会被限制在这个块的作用域中，而是被添加到 with 所处的函数作用域中。<br><strong>小结：</strong><br>&emsp;&emsp;词法作用域意味着作用域是由书写代码时函数声明的位置来决定的。编译的词法分析阶段基本能够知道全部标识符在哪里以及是如何声明的，从而能够预测在执行过程中如何对它进行查找。<br>&emsp;&emsp;JavaScript 中有两个机制可以“欺骗”词法作用域：eval(…)和 with。前者可以对一段包含一个或多个声明的“代码”字符串进行演算，并借此来修改已经存在的词法作用域（在运行时）。后者本质上是通过将一个对象的引用当作作用域来处理，将对象和属性当作作用域中的标识符来处理，从而创建了一个新的词法作用域（同样是运行时）。<br>&emsp;&emsp;这两个机制的副作用是引擎无法在编译时对作用域查找进行优化，因为引擎只能谨慎地认为这样的优化是无效的。使用这其中任何一个机制都将导致代码运行变慢。不要使用它们。</p><h3 id="第-3-章：函数作用域和块作用域"><a href="#第-3-章：函数作用域和块作用域" class="headerlink" title="第 3 章：函数作用域和块作用域"></a>第 3 章：函数作用域和块作用域</h3><h4 id="函数中的作用域"><a href="#函数中的作用域" class="headerlink" title="函数中的作用域"></a>函数中的作用域</h4><p>&emsp;&emsp;函数作用域的含义是指，属于这个函数的全部变量都可以在整个函数的范围内使用及复用（事实上在嵌套的作用域中也可以使用）。这种设计方案是非常有用的，能充分利用 JavaScript 变量可以根据需要改变值类型的“动态”特性。<br>&emsp;&emsp;但与此同时，如果不细心处理那些可以在整个作用域范围内被访问的变量，可能会带来意想不到的问题。</p><h4 id="匿名和具名函数"><a href="#匿名和具名函数" class="headerlink" title="匿名和具名函数"></a>匿名和具名函数</h4><p>&emsp;&emsp;函数表达式可以是匿名的，而函数声明则不可以省略函数名——在 JavaScript 的语法中这是非法的。<br>匿名函数表达式书写起来简单快捷，很多库和工具也倾向鼓励使用这种风格的代码。但是它也有几个缺点需要考虑：</p><p>&emsp;&emsp;&emsp;&emsp;1. 匿名函数在栈追踪中不会显示出有意义的函数名，使得调试很困难。<br>&emsp;&emsp;&emsp;&emsp;2. 如果没有函数名，当函数需要引用自身时只能使用已经过期的 arguments.callee 引用，比如在递归中。另一个函数需要引用自身的例子，是在事件触发后事件监听器需要解绑自身。<br>&emsp;&emsp;&emsp;&emsp;3. 匿名函数省略了对于代码可读性/可理解性很重要的函数名。一个描述性的名称可以让代码不言自明。</p><p>&emsp;&emsp;&emsp;&emsp;行内函数表达式非常强大且有用——匿名和具名之间的区别并不会对这点有任何影响。给函数表达式指定一个函数名可以有效解决以上问题。</p><h4 id="立即执行函数"><a href="#立即执行函数" class="headerlink" title="立即执行函数"></a>立即执行函数</h4><p>&emsp;&emsp;由于函数被包含在一对（）括号内部，因此成为了一个表达式，通过在末尾加上另外一个（）可以立即执行这个函数，比如（function foo（）{})()/第一个（）将函数变成表达式，第二个（）执行了这个函数。</p><h4 id="隐藏内部实现"><a href="#隐藏内部实现" class="headerlink" title="隐藏内部实现"></a>隐藏内部实现</h4><p>&emsp;&emsp;可以把变量和函数包裹在一个函数的作用域中，然后用这个作用域来“隐藏”他们<br>&emsp;&emsp;<strong>规避冲突</strong>：“隐藏”作用域中的变量和函数所带来的另一个好处，是可以避免同名标识符之间的冲突，两个标识符可能具有相同的名字但用途却不一样，无意间可能造成命名冲突。冲突会导致变量的值被意外覆盖。<br>&emsp;&emsp;&emsp;&emsp;<strong>1. 全局命名空间：</strong>在全局作用域中声明一个名字足够独特的变量，通常是一个对象。这个对象被用作库的命名空间，所有需要暴露给外界的功能都会成为这个对象（命名空间）的属性，而不是将自己的标识符暴露在顶级的词法作用域中。<br>&emsp;&emsp;&emsp;&emsp;<strong>2. 模块管理：</strong>另外一种避免冲突的办法和现代的模块机制很接近，就是从众多模块管理器中挑选一个来使用。使用这些工具，任何库都无需将标识符加入到全局作用域中。而是通过依赖管理器的机制将库的标识符现世显式地导入到另外一个特定的作用域中。<br><strong>小结：</strong><br>&emsp;&emsp;函数是 JavaScript 中最常见的作用域单元。本质上，声明在一个函数内部的变量或函数会在所处的作用域中“隐藏”起来，这是有意为之的良好软件的设计原则。<br>&emsp;&emsp;但函数不是唯一的作用域单元。块作用域指的是变量和函数不仅可以属于所处的作用域，也可以属于某个代码块（通常指{…}内部）。<br>&emsp;&emsp;从 ES3 开始，try/catch 结构在 catch 分句中具有块作用域。<br>&emsp;&emsp;在 ES6 中引入了 let 关键字（var 关键字的表亲），用来在任意代码块中声明变量。if(…){let a =2;} 会声明一个劫持了 if 的{…}块的变量，并且将变量添加到这个块中。<br>&emsp;&emsp;有些人认为块作用域不应该完全作为函数作用域的替代方案。两种功能应该同步存在，开发者可以并且也应该根据需要选择使用何种作用域，创造可读，可维护的优良代码。</p><h3 id="第-4-章：提升"><a href="#第-4-章：提升" class="headerlink" title="第 4 章：提升"></a>第 4 章：提升</h3><h3 id="第-5-章：作用域闭包"><a href="#第-5-章：作用域闭包" class="headerlink" title="第 5 章：作用域闭包"></a>第 5 章：作用域闭包</h3><h2 id="第二部分：this-和对象原型"><a href="#第二部分：this-和对象原型" class="headerlink" title="第二部分：this 和对象原型"></a>第二部分：this 和对象原型</h2><h3 id="第-1-章：关于-this"><a href="#第-1-章：关于-this" class="headerlink" title="第 1 章：关于 this"></a>第 1 章：关于 this</h3><h3 id="第-2-章：this-全面解析"><a href="#第-2-章：this-全面解析" class="headerlink" title="第 2 章：this 全面解析"></a>第 2 章：this 全面解析</h3><h3 id="第-3-章：对象"><a href="#第-3-章：对象" class="headerlink" title="第 3 章：对象"></a>第 3 章：对象</h3><h3 id="第-4-章：混合对象“类”"><a href="#第-4-章：混合对象“类”" class="headerlink" title="第 4 章：混合对象“类”"></a>第 4 章：混合对象“类”</h3><h3 id="第-5-章：原型"><a href="#第-5-章：原型" class="headerlink" title="第 5 章：原型"></a>第 5 章：原型</h3><h3 id="第-6-章：行为委托"><a href="#第-6-章：行为委托" class="headerlink" title="第 6 章：行为委托"></a>第 6 章：行为委托</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> JavaScript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>gogs+hexo搭建自己的git私服且自动部署博客网站</title>
+      <link href="2019/12/26/gogs-hexo%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84git%E7%A7%81%E6%9C%8D%E4%B8%94%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/"/>
+      <url>2019/12/26/gogs-hexo%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84git%E7%A7%81%E6%9C%8D%E4%B8%94%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99/</url>
+      
+        <content type="html"><![CDATA[<h5 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 docker"></a>安装 docker</h5><pre><code>    # 通过yum源安装docker    yum -y install docker    # 启动docker    systemctl start docker    # 开机自启    sudo systemctl enable docker</code></pre><h5 id="下载-gogs-的-docker-镜像"><a href="#下载-gogs-的-docker-镜像" class="headerlink" title="下载 gogs 的 docker 镜像"></a>下载 gogs 的 docker 镜像</h5><pre><code>    docker pull gogs/gogs</code></pre><h5 id="创建-gogs-存储的目录"><a href="#创建-gogs-存储的目录" class="headerlink" title="创建 gogs 存储的目录"></a>创建 gogs 存储的目录</h5><pre><code>    mkdir -p /var/gogs</code></pre><h5 id="运行镜像-产生容器"><a href="#运行镜像-产生容器" class="headerlink" title="运行镜像, 产生容器"></a>运行镜像, 产生容器</h5><pre><code>    docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs</code></pre><h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><pre><code>    通过浏览器访问公网 ip 地址:10080</code></pre><h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置    unset $(git rev-parse --local-env-vars);    cd /usr/local/nginx/hexo-blog    git pull origin master</code></pre><h5 id="测试钩子是否生效"><a href="#测试钩子是否生效" class="headerlink" title="测试钩子是否生效"></a>测试钩子是否生效</h5><pre><code>    cd /var/gogs/git/gogs-repositories/zhangnan/hexo-blog.git/custom_hooks/    [root@VM-0-11-centos custom_hooks]# ls    post-receive    [root@VM-0-11-centos custom_hooks]# ./post-receive</code></pre><h5 id="本地-Hexo-项目"><a href="#本地-Hexo-项目" class="headerlink" title="本地 Hexo 项目"></a>本地 Hexo 项目</h5><pre><code>    _config.yml内    deploy:        type: git        repo:            github: git@github.com:zn-nz/zn-nz.github.io.git            laycoder: http://laycoder.com:10080/zhangnan/hexo-blog.git // gogs博客仓库地址        branch: master</code></pre><h5 id="上传一次后，到想放的文件夹内-git-clone"><a href="#上传一次后，到想放的文件夹内-git-clone" class="headerlink" title="上传一次后，到想放的文件夹内 git clone"></a>上传一次后，到想放的文件夹内 git clone</h5><pre><code>    cd /usr/local/nginx/hexo-blog    git clone http://laycoder.com:10080/zhangnan/hexo-blog.git    git config credential.helper store  // 登录一次后，后续可免密登录</code></pre><h5 id="正常的-Nginx-web-服务器"><a href="#正常的-Nginx-web-服务器" class="headerlink" title="正常的 Nginx web 服务器"></a>正常的 Nginx web 服务器</h5><pre><code>    listen       443 ssl;    server_name  www.laycoder.com;    ssl_certificate      1_www.laycoder.com_bundle.crt;    ssl_certificate_key  2_www.laycoder.com.key;    ssl_session_cache    shared:SSL:1m;    ssl_session_timeout  5m;    ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;    ssl_prefer_server_ciphers  on;    location / &#123;        root   hexo-blog;        index  index.html index.htm;        try_files $uri $uri/ /index.html;    &#125;</code></pre><h5 id="后续本地发布时，自动部署到自己的目录下"><a href="#后续本地发布时，自动部署到自己的目录下" class="headerlink" title="后续本地发布时，自动部署到自己的目录下"></a>后续本地发布时，自动部署到自己的目录下</h5>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Gogs </tag>
+            
+            <tag> Hexo </tag>
+            
+            <tag> 笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>http协议</title>
+      <link href="2019/02/20/http%E5%8D%8F%E8%AE%AE/"/>
+      <url>2019/02/20/http%E5%8D%8F%E8%AE%AE/</url>
+      
+        <content type="html"><![CDATA[<h5 id="一-说一下什么是-Http-协议"><a href="#一-说一下什么是-Http-协议" class="headerlink" title="一.说一下什么是 Http 协议"></a>一.说一下什么是 Http 协议</h5><p>对器客户端和 服务器端之间数据传输的格式规范，格式简称为“超文本传输协议”。</p><h5 id="二-什么是-Http-协议无状态协议-怎么解决-Http-协议无状态协议"><a href="#二-什么是-Http-协议无状态协议-怎么解决-Http-协议无状态协议" class="headerlink" title="二.什么是 Http 协议无状态协议?怎么解决 Http 协议无状态协议?"></a>二.什么是 Http 协议无状态协议?怎么解决 Http 协议无状态协议?</h5><p>(1)、无状态协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息<br>(2)、无状态协议解决办法： 通过 1、Cookie 2、通过 Session 会话保存。</p><h5 id="三-Http-协议由什么组成"><a href="#三-Http-协议由什么组成" class="headerlink" title="三.Http 协议由什么组成?"></a>三.Http 协议由什么组成?</h5><p>请求报文包括三部分:<br>(1).请求行:包含请求方法,URI,HTTP 版本协议<br>(2).请求首部字段<br>(3).请求内容实体<br>响应报文包含三部分:<br>(1).状态行:包含 HTTP 版本,状态码,状态码原因短语<br>(2).响应首部字段<br>(3).响应内容实体</p><p>http 请求由三部分组成，分别是：请求行、消息报头、请求正文<br>HTTP（超文本传输协议）是一个基于请求与响应模式的、无状态的、应用层的协议，常基于 TCP 的连接方式，HTTP1.1 版本中给出一种持续连接的机制，绝大多数的 Web 开发，都是构建在 HTTP 协议之上的 Web 应用。<br>1、常用的 HTTP 方法有哪些？<br>GET、POST、PUT、HEAD、DELETE、OPTIONS<br>GET： 用于请求访问已经被 URI（统一资源标识符）识别的资源，可以通过 URL 传参给服务器。<br>POST：用于传输信息给服务器，主要功能与 GET 方法类似，但一般推荐使用 POST 方式。<br>PUT： 传输文件，报文主体中包含文件内容，保存到对应 URI 位置。<br>HEAD： 获得报文首部，与 GET 方法类似，只是不返回报文主体，一般用于验证 URI 是否有效。<br>DELETE：删除文件，与 PUT 方法相反，删除对应 URI 位置的文件。<br>OPTIONS：查询相应 URI 支持的 HTTP 方法。</p><p>2、GET 方法与 POST 方法的区别</p><ul><li>get 重点在从服务器上获取资源，post 重点在向服务器发送数据；</li><li>get 传输数据是通过 URL 请求，以 field（字段）= value 的形式，置于 URL 后，并用”?”连接，多个请求数据间用”&amp;”连接，如<a href="http://127.0.0.1/Test/login.action?name=admin&amp;password=admin%EF%BC%8C%E8%BF%99%E4%B8%AA%E8%BF%87%E7%A8%8B%E7%94%A8%E6%88%B7%E6%98%AF%E5%8F%AF%E8%A7%81%E7%9A%84%EF%BC%9Bpost%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE%E9%80%9A%E8%BF%87Http%E7%9A%84post%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%B0%86%E5%AD%97%E6%AE%B5%E4%B8%8E%E5%AF%B9%E5%BA%94%E5%80%BC%E5%B0%81%E5%AD%98%E5%9C%A8%E8%AF%B7%E6%B1%82%E5%AE%9E%E4%BD%93%E4%B8%AD%E5%8F%91%E9%80%81%E7%BB%99%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E8%BF%99%E4%B8%AA%E8%BF%87%E7%A8%8B%E5%AF%B9%E7%94%A8%E6%88%B7%E6%98%AF%E4%B8%8D%E5%8F%AF%E8%A7%81%E7%9A%84%EF%BC%9B">http://127.0.0.1/Test/login.action?name=admin&amp;password=admin，这个过程用户是可见的；post传输数据通过Http的post机制，将字段与对应值封存在请求实体中发送给服务器，这个过程对用户是不可见的；</a></li><li>Get 传输的数据量小，因为受 URL 长度限制，但效率较高；Post 可以传输大量数据，所以上传文件时只能用 Post 方式</li><li>get 是不安全的，因为 URL 是可见的，可能会泄露私密信息，如密码等；post 较 get 安全性较高</li><li>get 方式只能支持 ASCII 字符，向服务器传的中文字符可能会乱码；post 支持标准字符集，可以正确传递中文字符。</li></ul><p>3、HTTP 请求报文与响应报文格式<br>请求报文包含三部分：<br>a、请求行：包含请求方法、URI、HTTP 版本信息<br>b、请求首部字段<br>c、请求内容实体<br>响应报文包含三部分：<br>a、状态行：包含 HTTP 版本、状态码、状态码的原因短语<br>b、响应首部字段<br>c、响应内容实体</p><p>4、常见的 HTTP 相应状态码<br>返回的状态<br>1xx：指示信息–表示请求已接收，继续处理<br>2xx：成功–表示请求已被成功接收、理解、接受<br>3xx：重定向–要完成请求必须进行更进一步的操作<br>4xx：客户端错误–请求有语法错误或请求无法实现<br>5xx：服务器端错误–服务器未能实现合法的请求<br>200：请求被正常处理<br>204：请求被受理但没有资源可以返回<br>206：客户端只是请求资源的一部分，服务器只对请求的部分资源执行 GET 方法，相应报文中通过 Content-Range 指定范围的资源。<br>301：永久性重定向<br>302：临时重定向<br>303：与 302 状态码有相似功能，只是它希望客户端在请求一个 URI 的时候，能通过 GET 方法重定向到另一个 URI 上<br>304：发送附带条件的请求时，条件不满足时返回，与重定向无关<br>307：临时重定向，与 302 类似，只是强制要求使用 POST 方法<br>400：请求报文语法有误，服务器无法识别<br>401：请求需要认证<br>403：请求的对应资源禁止被访问<br>404：服务器无法找到对应资源<br>500：服务器内部错误<br>503：服务器正忙<br>5、HTTP1.1 版本新特性<br>a、默认持久连接节省通信量，只要客户端服务端任意一端没有明确提出断开 TCP 连接，就一直保持连接，可以发送多次 HTTP 请求<br>b、管线化，客户端可以同时发出多个 HTTP 请求，而不用一个个等待响应<br>c、断点续传原理</p><p>6、常见 HTTP 首部字段<br>a、通用首部字段（请求报文与响应报文都会使用的首部字段）<br>Date：创建报文时间<br>Connection：连接的管理<br>Cache-Control：缓存的控制<br>Transfer-Encoding：报文主体的传输编码方式<br>b、请求首部字段（请求报文会使用的首部字段）<br>Host：请求资源所在服务器<br>Accept：可处理的媒体类型<br>Accept-Charset：可接收的字符集<br>Accept-Encoding：可接受的内容编码<br>Accept-Language：可接受的自然语言<br>c、响应首部字段（响应报文会使用的首部字段）<br>Accept-Ranges：可接受的字节范围<br>Location：令客户端重新定向到的 URI<br>Server：HTTP 服务器的安装信息<br>d、实体首部字段（请求报文与响应报文的的实体部分使用的首部字段）<br>Allow：资源可支持的 HTTP 方法<br>Content-Type：实体主类的类型<br>Content-Encoding：实体主体适用的编码方式<br>Content-Language：实体主体的自然语言<br>Content-Length：实体主体的的字节数<br>Content-Range：实体主体的位置范围，一般用于发出部分请求时使用</p><p>7、HTTP 的缺点与 HTTPS<br>a、通信使用明文不加密，内容可能被窃听<br>b、不验证通信方身份，可能遭到伪装<br>c、无法验证报文完整性，可能被篡改<br>HTTPS 就是 HTTP 加上 SSL 加密处理（一般是 SSL 安全通信线路）+认证+完整性保护<br>https 的 SSL 过程<br>客户端浏览器在使用 HTTPS 方式与 Web 服务器通信时有以下几个步骤，如图所示。<br><img src="/imgs/http%E5%8D%8F%E8%AE%AE/1.png"><br>（1）客户使用 https 的 URL 访问 Web 服务器，要求与 Web 服务器建立 SSL 连接。<br>（2）Web 服务器收到客户端请求后，会生成一对公钥和私钥，并把公钥放在证书中发给客户端浏览器。<br>（3）客户端浏览器根据双方同意的 SSL 连接的安全等级，建立会话密钥，然后用公钥将会话密钥加密，并传送给服务器。<br>（4）Web 服务器用自己的私钥解密出会话密钥。<br>（5）Web 服务器利用会话密钥加密与客户端之间的通信。</p><p>8、HTTP 优化<br>利用负载均衡优化和加速 HTTP 应用<br>利用 HTTP Cache 来优化网站</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> HTTP </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面试题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux下mysql安装</title>
+      <link href="2019/01/20/Linux%E4%B8%8Bmysql%E5%AE%89%E8%A3%85/"/>
+      <url>2019/01/20/Linux%E4%B8%8Bmysql%E5%AE%89%E8%A3%85/</url>
+      
+        <content type="html"><![CDATA[<p>去官网下载 Yum 资源包，下载地址为：<a href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/</a></p><p>wget <a href="http://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm">http://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm</a></p><p>rpm -ivh mysql*<strong>*****</strong>.rpm<br>yum update<br>yum install mysql-server</p><p>权限设置：<br>chown mysql:mysql -R /var/lib/mysql<br>初始化 MySQL：<br>mysqld –initialize<br>启动 MySQL：<br>systemctl start mysqld<br>查看 MySQL 运行状态：<br>systemctl status mysqld</p><p>【修改密码】</p><ol><li>刚刚启动成功之后, 用命令查看默认密码并且登录<br>　　　　查看：cat /var/log/mysqld.log | grep password<br>　　　　登陆：mysql -u root -p 然后输入密码</li><li>修改密码<br>　　　　 set global validate_password.policy=0;<br>　　　　 set global validate_password.length=1;<br>　　　　 ALTER USER “root”@”localhost” IDENTIFIED BY “1234”; // 新密码为 1234<br>　　　　远程连接时要替换成 ALTER USER “root”@”%” IDENTIFIED BY “1234”;)</li><li>exit 退出 mysql -u root -p 然后输入密码即可登录<br>【授权远程访问】<br>　　首先确保关闭了防火墙 并重启 mysql。<br>　　 1. 选择数据库 use mysql show tables;可以看到很多表<br>　　 2. 修改连接规则：host 表示允许哪个 ip 来连接，user 表示哪个数据库。例如 mysql –uroot –p 连的就是叫 root 数据库。<br>　　 3. 查看规则 select host,user from user \G; 修改规则 update user set host= ‘%’ where user = ‘root’;</li><li>mysql5.7.6 之后就修改了加密规则，我这里是 mysql8.0.12 所以需要更改加密方式。<br>　　　 update user set plugin=’mysql_native_password’ where user =’root’;<br>　　 5. 刷新权限 flush privileges;<br>　　 6. 测试外网连接 mysql 服务器。<br>　　 (如果外网连接失败的话，先按照【重置密码】执行一遍，再执行【修改密码】，只是 ALTER USER “root”@”localhost” IDENTIFIED BY “1234”;要替换成 ALTER USER “root”@”%” IDENTIFIED BY “1234”;)</li></ol><p>【重置密码】</p><ol><li>开启免密码登陆 修改 my.cnf 文件 默认在/etc/my.cnf。<br>　　　　 vim /etc/my.cnf 在【mysqld】模块下面添加：skip-grant-tables 保存退出。</li><li>重启服务，使配置生效 。 service mysqld restart</li><li>登陆 mysql -u root -p //不输入密码直接敲回车键</li><li>选择数据库 use mysql 把密码置空(因为免密登陆时不能直接修改密码)<br>　　　　 update user set authentication_string = ‘’ where user = ‘root’;</li><li>退出 quit 把/etc/my.cnf 免密删掉。 重启服务 service mysqld restart</li><li>登陆 mysql -u root -p //直接敲回车键，因为刚刚置空密码了。</li><li>和上面修改密码的步骤一样，重复一遍就好了</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>运用pm2</title>
+      <link href="2019/01/20/%E8%BF%90%E7%94%A8pm2/"/>
+      <url>2019/01/20/%E8%BF%90%E7%94%A8pm2/</url>
+      
+        <content type="html"><![CDATA[<p>Installing PM2<br>With NPM:</p><pre><code>    $ npm install pm2 -g</code></pre><p>Or if you don’t have Node.js installed:</p><pre><code>    wget -qO- https://getpm2.com/install.sh | bash</code></pre><p>Start an application<br>You can start any application (Node.js, Python, Ruby, binaries in $PATH…) like that:</p><pre><code>    $ pm2 start app.js</code></pre><p>Your app is now daemonized, monitored and kept alive forever.<br>More about Process Management<br>Managing Applications<br>Once applications are started you can manage them easily:</p><p>To list all running applications:</p><pre><code>    $ pm2 list</code></pre><p>Managing apps is straightforward:</p><pre><code>    $ pm2 stop &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;    $ pm2 restart &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;    $ pm2 delete &lt;app_name|namespace|id|&#39;all&#39;|json_conf&gt;</code></pre><p>To have more details on a specific application:</p><pre><code>    $ pm2 describe &lt;id|app_name&gt;</code></pre><p>To monitor logs, custom metrics, application information:</p><pre><code>    $ pm2 monit</code></pre><p>More about Application Management<br>Cluster Mode: Node.js Load Balancing &amp; Zero Downtime Reload<br>The Cluster mode is a special mode when starting a Node.js application, it starts multiple processes and load-balance HTTP/TCP/UDP queries between them. This increase overall performance (by a factor of x10 on 16 cores machines) and reliability (faster socket re-balancing in case of unhandled errors).<br>Starting a Node.js application in cluster mode that will leverage all CPUs available:</p><pre><code>    $ pm2 start api.js -i &lt;processes&gt;</code></pre><p>&lt;processes&gt; can be ‘max’, -1 (all cpu minus 1) or a specified number of instances to start.<br>Zero Downtime Reload<br>Hot Reload allows to update an application without any downtime:</p><pre><code>    $ pm2 reload all</code></pre><p>Seamlessly supported by all major Node.js frameworks and any Node.js applications without any code change:<br>More informations about how PM2 make clustering easy<br>Container Support<br>With the drop-in replacement command for node, called pm2-runtime, run your Node.js application in a hardened production environment. Using it is seamless:<br>RUN npm install pm2 -g<br>CMD [ “pm2-runtime”, “npm”, “–”, “start” ]</p><p>Read More about the dedicated integration<br>Terminal Based Monitoring<br>Monitor all processes launched straight from the command line:</p><pre><code>    $ pm2 monit</code></pre><p>Log Management<br>To consult logs just type the command:</p><pre><code>    $ pm2 logs</code></pre><p>Standard, Raw, JSON and formated output are available.<br>Examples:</p><pre><code>    $ pm2 logs APP-NAME # Display APP-NAME logs    $ pm2 logs --json # JSON output    $ pm2 logs --format # Formated output    $ pm2 flush # Flush all logs    $ pm2 reloadLogs # Reload all logs</code></pre><p>More about log management<br>Startup Scripts Generation<br>PM2 can generates and configure a Startup Script to keep PM2 and your processes alive at every server restart.<br>Init Systems Supported: systemd, upstart, launchd, rc.d</p><h1 id="Generate-Startup-Script"><a href="#Generate-Startup-Script" class="headerlink" title="Generate Startup Script"></a>Generate Startup Script</h1><pre><code>    $ pm2 startup</code></pre><h1 id="Freeze-your-process-list-across-server-restart"><a href="#Freeze-your-process-list-across-server-restart" class="headerlink" title="Freeze your process list across server restart"></a>Freeze your process list across server restart</h1><pre><code>    $ pm2 save</code></pre><h1 id="Remove-Startup-Script"><a href="#Remove-Startup-Script" class="headerlink" title="Remove Startup Script"></a>Remove Startup Script</h1><pre><code>    $ pm2 unstartup</code></pre><p>More about Startup Scripts Generation<br>PM2 Modules<br>PM2 embeds a simple and powerful module system. Installing a module is straightforward:</p><pre><code>    $ pm2 install &lt;module_name&gt;</code></pre><p>Here are some PM2 compatible modules (standalone Node.js applications managed by PM2):<br>pm2-logrotate automatically rotate logs and limit logs size<br>pm2-server-monit monitor the current server with more than 20+ metrics and 8 actions<br>Updating PM2</p><h1 id="Install-latest-PM2-version"><a href="#Install-latest-PM2-version" class="headerlink" title="Install latest PM2 version"></a>Install latest PM2 version</h1><pre><code>    $ npm install pm2@latest -g</code></pre><h1 id="Save-process-list-exit-old-PM2-amp-restore-all-processes"><a href="#Save-process-list-exit-old-PM2-amp-restore-all-processes" class="headerlink" title="Save process list, exit old PM2 &amp; restore all processes"></a>Save process list, exit old PM2 &amp; restore all processes</h1><pre><code>    $ pm2 update</code></pre><p>PM2 updates are seamless</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> pm2 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux上安装nvm</title>
+      <link href="2019/01/20/Linux%E5%AE%89%E8%A3%85nvm/"/>
+      <url>2019/01/20/Linux%E5%AE%89%E8%A3%85nvm/</url>
+      
+        <content type="html"><![CDATA[<p>第一步安装</p><p>curl -o- <a href="https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh">https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh</a> | bash</p><p>第二步</p><p>export NVM_DIR=”${XDG_CONFIG_HOME/:-$HOME/.}nvm”<br>[ -s “$NVM_DIR/nvm.sh” ] &amp;&amp; . “$NVM_DIR/nvm.sh” # This loads nvm</p><p>第三步：</p><p>nvm –version</p><p>出现版本号表示安装成功<br>安装 node<br>安装 node</p><p>nvm install v10.16.0</p><p>nvm use 版本号<br>nvm alias default v*<em>.**.\</em> 更改默认开机版本</p><p>若下载不了<br>则用 git clone<br>cd nvm<br>./install.sh</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> nvm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>设计稿rem换算</title>
+      <link href="2018/12/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/"/>
+      <url>2018/12/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/</url>
+      
+        <content type="html"><![CDATA[<p>rem 是相对于根元素的字体大小的单位<br>根据设计稿参照<br>如 iPhone6 375x667</p><p>屏幕宽为 100vw<br>1vw=375px/100=3.75px<br>100px/3.75=26.67;<br>26.67vw = 100px = 1rem<br>设计稿一般为 750px 则<br>html 根元素设置 font-size</p><pre><code>html&#123;  font-size:13.33vw;&#125;</code></pre><p>页面使用时将设计稿的像素值/100=rem 数值</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 移动端 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>浏览器信息</title>
+      <link href="2018/12/28/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BF%A1%E6%81%AF/"/>
+      <url>2018/12/28/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BF%A1%E6%81%AF/</url>
+      
+        <content type="html"><![CDATA[<ol><li><p>window<br>表示浏览器的窗口。<br>有 innerWidth 和 innerHeight 这两个属性。可以获取浏览器的内部宽高。<br>window.innerWidth;<br>window.innerHeight;<br>对应的还有 outWidth 和 outHeight 这两个属性，获取浏览器窗口的整体的宽高。<br>window.outerWidth;<br>window.outerHeight;</p></li><li><p>navigator<br>表示浏览器信息。<br>navigator.appName:浏览器名称；<br>navigator.appVersion:浏览器版本<br>navigator.language:浏览器设置的语言<br>navigator.platform：操作系统类型；<br>navigator.userAgent:浏览器设定的 Use-Agent 字符串</p></li><li><p>screen<br>表示屏幕信息。<br>screen.width; //屏幕宽度<br>screen.height; //屏幕宽度<br>screen.colorDepth; //颜色位数</p></li><li><p>location<br>表示当前页面的 URL 信息。<br>location.href; //获取当前页面 URL 整体信息</p></li><li><p>document<br>表示当前的页面信息。<br>还可以获取当前页面的 Cookie 信息。<br>document.cookie;</p></li><li><p>history<br>表示页面的历史纪录。<br>但在任何情况下不使用该对象。</p></li></ol>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 浏览器 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>js引擎的执行过程（一）</title>
+      <link href="2018/12/20/js%E5%BC%95%E6%93%8E%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+      <url>2018/12/20/js%E5%BC%95%E6%93%8E%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<h2 id="js-引擎的执行过程（一）"><a href="#js-引擎的执行过程（一）" class="headerlink" title="js 引擎的执行过程（一）"></a><center>js 引擎的执行过程（一）</center></h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>js 是一种非常灵活的语言，理解 js 引擎的执行过程对我们学习 javascript 非常重要，但是网上讲解 js 引擎的文章也大多是浅尝辄止或者只局部分析，例如只分析事件循环（Event Loop）或者变量提升等等，并没有全面深入的分析其中过程。所以我一直想把 js 执行的详细过程整理成一个较为详细的知识体系，帮助我们理解和整体认识 js。<br>在分析之前我们先了解以下基础概念：</p><ul><li>javascript 是<strong>单线程语言</strong><br>在浏览器中一个页面永远只有一个线程在执行 js 脚本代码（在不主动开启新线程的情况下）。</li><li>javascript 是单线程语言,但是代码解析却十分的快速，不会发生解析阻塞。</li></ul><p>javascript 是异步执行的，通过<strong>事件循环（Event Loop）</strong>的方式实现。<br>下面我们先通过一段较为简单的代码（暂不存在事件循环（Event Loop））来检验我们对 js 引擎执行过程的理解是否正确，如下：</p><pre><code>    &lt;script&gt;        console.log(fun)        console.log(person)    &lt;/script&gt;    &lt;script&gt;        console.log(person)        console.log(fun)        var person = &quot;Eric&quot;;        console.log(person)        function fun() &#123;            console.log(person)            var person = &quot;Tom&quot;;            console.log(person)        &#125;        fun()        console.log(person)    &lt;/script&gt;</code></pre><p>我们可以先分析上面的代码，按自己的理解分析输出的顺序是什么，然后在浏览器执行一次，结果一样的话，那么代表你已经对 js 引擎执行过程有了正确的理解；如果不是，则代表还存在模糊或者概念不清晰等问题。结果我们不在这里进行讨论，我们利用上面简单的例子全面分析 js 引擎执行过程，相信在理解该过程后我们就不难得出结果的，js 引擎执行过程分为三个阶段：</p><ol><li><strong>语法分析</strong></li><li><strong>预编译阶段</strong></li><li><strong>执行阶段</strong></li></ol><p>注：浏览器首先按顺序加载由&lt;<strong>script</strong>&gt;标签分割的 js 代码块，加载 js 代码块完毕后，立刻进入以上三个阶段，然后再按顺序查找下一个代码块，再继续执行以上三个阶段，无论是外部脚本文件（不异步加载）还是内部脚本代码块，都是一样的原理，并且都在同一个全局作用域中。</p><h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>js 脚本代码块加载完毕后，会首先进入语法分析阶段。该阶段主要作用是：<br>分析该 js 脚本代码块的语法是否正确，如果出现不正确，则向外抛出一个语法错误（SyntaxError），停止该 js 代码块的执行，然后继续查找并加载下一个代码块；如果语法正确，则进入预编译阶段<br>语法错误报错如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE1.jpeg"></p><h3 id="预编译阶段"><a href="#预编译阶段" class="headerlink" title="预编译阶段"></a>预编译阶段</h3><p>js 代码块通过语法分析阶段后，语法正确则进入预编译阶段。在分析预编译阶段之前，我们先了解一下 js 的运行环境，运行环境主要有三种：</p><ul><li><strong>全局环境</strong>（JS 代码加载完毕后，进入代码预编译即进入全局环境）</li><li><strong>函数环境</strong>（函数调用执行时，进入该函数环境，不同的函数则函数环境不同）</li><li><strong>eval</strong>（不建议使用，会有安全，性能等问题）</li></ul><p>每进入一个不同的运行环境都会创建一个相应的<strong>执行上下文（Execution Context）</strong>，那么在一段 JS 程序中一般都会创建多个执行上下文，js 引擎会以栈的方式对这些执行上下文进行处理，形成<strong>函数调用栈（call stack）</strong>，栈底永远是全局执行上下文（Global Execution Context），栈顶则永远是当前执行上下文。</p><h4 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h4><p>函数调用栈就是使用栈存取的方式进行管理运行环境，特点是<strong>先进后出，后进先出</strong>。<br>我们分析下段简单的 JS 脚本代码来理解函数调用栈：</p><pre><code>    function bar() &#123;    var B_context = &quot;Bar EC&quot;;    function foo() &#123;        var f_context = &quot;foo EC&quot;;    &#125;    foo();    &#125;    bar();</code></pre><p>上面的代码块通过语法分析后，进入预编译阶段，如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE2.png"></p><ol><li>首先进入全局环境，创建全局执行上下文（Global Execution Context），推入 stack 栈中</li><li>调用 bar 函数，进入 bar 函数运行环境，创建 bar 函数执行上下文（bar Execution Context），推入 stack 栈中</li><li>在 bar 函数内部调用 foo 函数，则再进入 foo 函数运行环境，创建 foo 函数执行上下文（foo Execution Context），推入 stack 栈中</li><li>此刻栈底是全局执行上下文（Global Execution Context），栈顶是 foo 函数执行上下文（foo Execution Context），如上图，由于 foo 函数内部没有再调用其他函数，那么则开始出栈</li><li>foo 函数执行完毕后，栈顶 foo 函数执行上下文（foo Execution Context）首先出栈</li><li>bar 函数执行完毕，bar 函数执行上下文（bar Execution Context）出栈</li><li>Global Execution Context 则在浏览器或者该标签页关闭时出栈。</li></ol><p>注：不同的运行环境执行都会进入代码预编译和执行两个阶段，语法分析则在代码块加载完毕时统一检验语法</p><h4 id="创建执行上下文"><a href="#创建执行上下文" class="headerlink" title="创建执行上下文"></a>创建执行上下文</h4><p>执行上下文可理解为当前的执行环境，与该运行环境相对应。创建执行上下文的过程中，主要做了以下三件事件，如图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE3.jpeg"><br><strong>1.创建变量对象（Variable Object）</strong><br><strong>2.建立作用域链（Scope Chain）</strong><br><strong>3.确定 this 的指向</strong></p><h4 id="创建变量对象"><a href="#创建变量对象" class="headerlink" title="创建变量对象"></a>创建变量对象</h4><p>创建变量对象主要经过以下几个过程，如图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE4.jpeg"></p><ol><li>创建 arguments 对象，检查当前上下文中的参数，建立该对象的属性与属性值，仅在函数环境(非箭头函数)中进行，全局环境没有此过程</li><li>检查当前上下文的函数声明，按代码顺序查找，将找到的函数提前声明，如果当前上下文的变量对象没有该函数名属性，则在该变量对象以函数名建立一个属性，属性值则为指向该函数所在堆内存地址的引用，如果存在，则会被新的引用覆盖。</li><li>检查当前上下文的变量声明，按代码顺序查找，将找到的变量提前声明，如果当前上下文的变量对象没有该变量名属性，则在该变量对象以变量名建立一个属性，属性值为 undefined；如果存在，则忽略该变量声明</li></ol><p>注：在全局环境中，window 对象就是全局执行上下文的变量对象，所有的变量和函数都是 window 对象的属性方法。<br>所以函数声明提前和变量声明提升是在创建变量对象中进行的，且函数声明优先级高于变量声明。<br>我们分析一段简单的代码，帮助我们理解该过程，如下：</p><pre><code>    function fun(a, b) &#123;    var num = 1;    function test() &#123;        console.log(num);    &#125;    &#125;    fun(2, 3);</code></pre><p>这里我们在全局环境调用 fun 函数，创建 fun 执行上下文，这里为了方便大家理解，暂时不讲解作用域链以及 this 指向，如下：</p><pre><code>    funEC = &#123;    //变量对象    VO: &#123;        //arguments对象        arguments: &#123;        a: undefined,        b: undefined,        length: 2,        &#125;,        //test函数        test: &lt;test reference&gt;,        //num变量        num: undefined,    &#125;,    //作用域链    scopeChain: [],    //this指向    this: window,    &#125;;</code></pre><ul><li>funEC 表示 fun 函数的执行上下文（fun Execution Context 简写为 funEC）</li><li>funE 的变量对象中 arguments 属性，上面的写法仅为了方便大家理解，但是在浏览器中展示是以类数组的方式展示的</li><li>&lt;test reference&gt;表示 test 函数在堆内存地址的引用</li></ul><p>注：创建变量对象发生在预编译阶段，但尚未进入执行阶段，该变量对象都是不能访问的，因为此时的变量对象中的变量属性尚未赋值，值仍为 undefined，只有进入执行阶段，变量对象中的变量属性进行赋值后，变量对象（Variable Object）转为活动对象（Active Object）后，才能进行访问，这个过程就是 VO –&gt; AO 过程。</p><h4 id="建立作用域链"><a href="#建立作用域链" class="headerlink" title="建立作用域链"></a>建立作用域链</h4><p><strong>作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，它保证了当前执行环境对符合访问权限的变量和函数的有序访问。</strong><br>理清作用域链可以帮助我们理解 js 很多问题包括闭包问题等，下面我们结合一个简单的例子来理解作用域链，如下：</p><pre><code>    var num = 30;    function test() &#123;    var a = 10;    function innerTest() &#123;        var b = 20;        return a + b;    &#125;    innerTest();    &#125;    test();</code></pre><p>在上面的例子中，当执行到调用 innerTest 函数，进入 innerTest 函数环境。全局执行上下文和 test 函数执行上下文已进入执行阶段，innerTest 函数执行上下文在预编译阶段创建变量对象，所以他们的活动对象和变量对象分别是 AO(global)，AO(test)和 VO(innerTest)，而 innerTest 的作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，如下：<br>innerTestEC = { //变量对象 VO: {b: undefined}, //作用域链 scopeChain: [VO(innerTest), AO(test), AO(global)], //this 指向 this: window}<br>我们这里直接使用数组表示作用域链，作用域链的活动对象或变量对象可以直接理解为作用域。<br>作用域链的第一项永远是当前作用域（当前上下文的变量对象或活动对象）；<br>最后一项永远是全局作用域（全局执行上下文的活动对象）；<br>作用域链保证了变量和函数的有序访问，查找方式是沿着作用域链从左至右查找变量或函数，找到则会停止查找，找不到则一直查找到全局作用域，再找不到则会抛出引用错误。<br>在这里我们顺便思考一下，什么是闭包？<br>我们先看下面一个简单例子，如下：</p><pre><code>    function foo() &#123;    var num = 20;    function bar() &#123;        var result = num + 20;        return result;    &#125;    bar();    &#125;    foo();</code></pre><p>因为对于闭包有很多不同的理解，包括我看的一些书籍(例如 js 高级程序设计)，我这里直接以浏览器解析，以浏览器理解的闭包为准来分析闭包，如下图：<br><img src="/imgs/js%E5%BC%95%E6%93%8E%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/%E5%9B%BE5.jpeg"><br>如上图所示，chrome 浏览器理解闭包是 foo，那么按浏览器的标准是如何定义闭包的，我总结为三点：</p><ul><li><strong>在函数内部定义新函数</strong></li><li><strong>新函数访问外层函数的局部变量，即访问外层函数环境的活动对象属性</strong></li><li><strong>新函数执行，创建新的函数执行上下文，外层函数即为闭包</strong></li></ul><hr><p><strong>确定 this 指向</strong><br>在全局环境下，全局执行上下文中变量对象的 this 属性指向为 window；函数环境下的 this 指向却较为灵活，需根据执行环境和执行方法确定，需要举大量的典型例子概括，本文先不做分析。</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>由于涉及的内容过多，这里将第三个阶段（<strong>执行阶段</strong>）单独分离出来。另开新文章进行详细分析，下篇文章主要介绍 js 执行阶段中的同步任务执行和异步任务执行机制（<strong>事件循环（Event Loop）</strong>）</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> JavaScript </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="2018/06/28/hello-world/"/>
+      <url>2018/06/28/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
