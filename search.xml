@@ -117,6 +117,25 @@
     
     
     <entry>
+      <title>设计稿rem换算</title>
+      <link href="2019/02/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/"/>
+      <url>2019/02/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/</url>
+      
+        <content type="html"><![CDATA[<p>rem 是相对于根元素的字体大小的单位<br>根据设计稿参照<br>如 iPhone6 375x667</p><p>屏幕宽为 100vw<br>1vw=375px/100=3.75px<br>100px/3.75=26.67;<br>26.67vw = 100px = 1rem<br>设计稿一般为 750px 则<br>html 根元素设置 font-size</p><pre><code>html&#123;  font-size:13.33vw;&#125;</code></pre><p>页面使用时将设计稿的像素值/100=rem 数值</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 移动端 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>http协议</title>
       <link href="2019/02/20/http%E5%8D%8F%E8%AE%AE/"/>
       <url>2019/02/20/http%E5%8D%8F%E8%AE%AE/</url>
@@ -209,25 +228,6 @@
         <tags>
             
             <tag> nvm </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>设计稿rem换算</title>
-      <link href="2018/12/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/"/>
-      <url>2018/12/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/</url>
-      
-        <content type="html"><![CDATA[<p>rem 是相对于根元素的字体大小的单位<br>根据设计稿参照<br>如 iPhone6 375x667</p><p>屏幕宽为 100vw<br>1vw=375px/100=3.75px<br>100px/3.75=26.67;<br>26.67vw = 100px = 1rem<br>设计稿一般为 750px 则<br>html 根元素设置 font-size</p><pre><code>html&#123;  font-size:13.33vw;&#125;</code></pre><p>页面使用时将设计稿的像素值/100=rem 数值</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 移动端 </tag>
             
         </tags>
       
