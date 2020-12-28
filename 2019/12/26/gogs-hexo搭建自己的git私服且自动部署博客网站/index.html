@@ -379,7 +379,10 @@
 <h5 id="创建-gogs-存储的目录"><a href="#创建-gogs-存储的目录" class="headerlink" title="创建 gogs 存储的目录"></a>创建 gogs 存储的目录</h5><pre><code>    mkdir -p /var/gogs</code></pre>
 <h5 id="运行镜像-产生容器"><a href="#运行镜像-产生容器" class="headerlink" title="运行镜像, 产生容器"></a>运行镜像, 产生容器</h5><pre><code>    docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs</code></pre>
 <h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><pre><code>    通过浏览器访问公网 ip 地址:10080</code></pre>
-<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
+<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    // 给git用户权限
+    chown –R git:git /usr/local/nginx/hexo-blog
+
+    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
 
     unset $(git rev-parse --local-env-vars);
     cd /usr/local/nginx/hexo-blog
