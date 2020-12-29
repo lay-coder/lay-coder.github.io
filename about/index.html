@@ -106,28 +106,6 @@
     
   </li>
   
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>友情链接</span>
-    </a>
-    
-  </li>
-  
   <li>
     <a href="#searchModal" class="modal-trigger waves-effect waves-light">
       <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
@@ -205,28 +183,6 @@
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			友情链接
 		</a>
           
         </li>
@@ -523,7 +479,7 @@
                 type: 'pie',
                 radius: '50%',
                 color: ['#6772e5', '#ff9e0f', '#fa755a', '#3ecf8e', '#82d3f4', '#ab47bc', '#525f7f', '#f51c47', '#26A69A'],
-                data: [{"name":"工具","value":3},{"name":"Hexo","value":1},{"name":"HTTP","value":1},{"name":"JavaScript","value":3}],
+                data: [{"name":"工具","value":3},{"name":"HTTP","value":1},{"name":"Hexo","value":1},{"name":"JavaScript","value":3}],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -547,7 +503,7 @@
         xAxis: [
             {
                 type: 'category',
-                data: ["笔记","浏览器","Hexo","面试题","JavaScript","nvm","mysql","Gogs","vuex","pm2"]
+                data: ["笔记","Hexo","浏览器","面试题","JavaScript","mysql","Gogs","nvm","vuex","移动端"]
             }
         ],
         yAxis: [
@@ -605,17 +561,6 @@
         <div class="col s12 m6 l6" data-aos="fade-up">
             <div class="skillbar">
                 <div class="skillbar-title"
-                     style="background: linear-gradient(to right, #FF0066 0%, #FF00CC 100%); width: 85%">
-                    <span>Java</span>
-                </div>
-                <div class="skill-bar-percent">85%</div>
-            </div>
-        </div>
-        
-        
-        <div class="col s12 m6 l6" data-aos="fade-up">
-            <div class="skillbar">
-                <div class="skillbar-title"
                      style="background: linear-gradient(to right, #9900FF 0%, #CC66FF 100%); width: 80%">
                     <span>JavaScript</span>
                 </div>
@@ -642,28 +587,6 @@
                     <span>CSS</span>
                 </div>
                 <div class="skill-bar-percent">70%</div>
-            </div>
-        </div>
-        
-        
-        <div class="col s12 m6 l6" data-aos="fade-up">
-            <div class="skillbar">
-                <div class="skillbar-title"
-                     style="background: linear-gradient(to right, #4CAF50 0%, #81C784 100%); width: 90%">
-                    <span>SQL</span>
-                </div>
-                <div class="skill-bar-percent">90%</div>
-            </div>
-        </div>
-        
-        
-        <div class="col s12 m6 l6" data-aos="fade-up">
-            <div class="skillbar">
-                <div class="skillbar-title"
-                     style="background: linear-gradient(to right, #FFEB3B 0%, #FFF176 100%); width: 75%">
-                    <span>程序设计</span>
-                </div>
-                <div class="skill-bar-percent">75%</div>
             </div>
         </div>
         
@@ -711,26 +634,8 @@
         <div class="tag-chips center-align">
             
             
-            <a href="/tags/nvm/">
-                <span class="chip center-align waves-effect waves-light chip-default">nvm</span>
-            </a>
-            
-            
-            
             <a href="/tags/mysql/">
                 <span class="chip center-align waves-effect waves-light chip-default">mysql</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">
-                <span class="chip center-align waves-effect waves-light chip-default">浏览器</span>
-            </a>
-            
-            
-            
-            <a href="/tags/Hexo/">
-                <span class="chip center-align waves-effect waves-light chip-default">Hexo</span>
             </a>
             
             
@@ -741,8 +646,26 @@
             
             
             
+            <a href="/tags/Hexo/">
+                <span class="chip center-align waves-effect waves-light chip-default">Hexo</span>
+            </a>
+            
+            
+            
             <a href="/tags/%E7%AC%94%E8%AE%B0/">
                 <span class="chip center-align waves-effect waves-light chip-default">笔记</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">
+                <span class="chip center-align waves-effect waves-light chip-default">浏览器</span>
+            </a>
+            
+            
+            
+            <a href="/tags/nvm/">
+                <span class="chip center-align waves-effect waves-light chip-default">nvm</span>
             </a>
             
             
@@ -761,14 +684,14 @@
             
             
             
-            <a href="/tags/pm2/">
-                <span class="chip center-align waves-effect waves-light chip-default">pm2</span>
+            <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">
+                <span class="chip center-align waves-effect waves-light chip-default">移动端</span>
             </a>
             
             
             
-            <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">
-                <span class="chip center-align waves-effect waves-light chip-default">移动端</span>
+            <a href="/tags/pm2/">
+                <span class="chip center-align waves-effect waves-light chip-default">pm2</span>
             </a>
             
             
