@@ -428,9 +428,10 @@
 
     并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
 
+    #!/usr/bin/env bash
     unset $(git rev-parse --local-env-vars);
-    cd /usr/local/nginx/hexo-blog
-    git pull origin master</code></pre>
+    cd /usr/local/nginx/hexo-blog/;
+    git pull;</code></pre>
 <h5 id="测试钩子是否生效"><a href="#测试钩子是否生效" class="headerlink" title="测试钩子是否生效"></a>测试钩子是否生效</h5><pre><code>    cd /var/gogs/git/gogs-repositories/zhangnan/hexo-blog.git/custom_hooks/
     [root@VM-0-11-centos custom_hooks]# ls
     post-receive
