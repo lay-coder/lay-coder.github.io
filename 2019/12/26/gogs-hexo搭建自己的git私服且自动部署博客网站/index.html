@@ -423,7 +423,10 @@
 <h5 id="创建-gogs-存储的目录"><a href="#创建-gogs-存储的目录" class="headerlink" title="创建 gogs 存储的目录"></a>创建 gogs 存储的目录</h5><pre><code>    mkdir -p /var/gogs</code></pre>
 <h5 id="运行镜像-产生容器"><a href="#运行镜像-产生容器" class="headerlink" title="运行镜像, 产生容器"></a>运行镜像, 产生容器</h5><pre><code>    docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs</code></pre>
 <h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><pre><code>    通过浏览器访问公网 ip 地址:10080</code></pre>
-<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
+<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    // 给git用户权限
+    chown –R git:git /usr/local/nginx/hexo-blog
+
+    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
 
     unset $(git rev-parse --local-env-vars);
     cd /usr/local/nginx/hexo-blog
@@ -442,7 +445,11 @@
         branch: master</code></pre>
 <h5 id="上传一次后，到想放的文件夹内-git-clone"><a href="#上传一次后，到想放的文件夹内-git-clone" class="headerlink" title="上传一次后，到想放的文件夹内 git clone"></a>上传一次后，到想放的文件夹内 git clone</h5><pre><code>    cd /usr/local/nginx/hexo-blog
     git clone http://laycoder.com:10080/zhangnan/hexo-blog.git
-    git config credential.helper store  // 登录一次后，后续可免密登录</code></pre>
+    git config credential.helper store  // 登录一次后，后续可免密登录
+    或在.git下的config内
+    [remote &quot;origin&quot;]
+            url = http://&#123;user&#125;:&#123;password&#125;@laycoder.com:10080/zhangnan/hexo-blog.git
+            fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
 <h5 id="正常的-Nginx-web-服务器"><a href="#正常的-Nginx-web-服务器" class="headerlink" title="正常的 Nginx web 服务器"></a>正常的 Nginx web 服务器</h5><pre><code>    listen       443 ssl;
     server_name  www.laycoder.com;
     ssl_certificate      1_www.laycoder.com_bundle.crt;
@@ -576,13 +583,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/02/28/%E8%AE%BE%E8%AE%A1%E7%A8%BFrem%E6%8D%A2%E7%AE%97/">
+                <a href="/2019/05/28/%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="设计稿rem换算">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="数组排序">
                         
-                        <span class="card-title">设计稿rem换算</span>
+                        <span class="card-title">数组排序</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -593,7 +600,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-02-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-05-28
                             </span>
                         <span class="publish-author">
                             
@@ -606,8 +613,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/">
-                        <span class="chip bg-color">移动端</span>
+                    <a href="/tags/JavaScript/">
+                        <span class="chip bg-color">JavaScript</span>
                     </a>
                     
                 </div>
