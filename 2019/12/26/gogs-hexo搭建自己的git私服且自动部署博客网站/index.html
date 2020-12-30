@@ -419,7 +419,7 @@ ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!
 ssl_prefer_server_ciphers  on;
 
 location / &#123;
-    root   /var/gogs/hexo-blog; // 真实路径
+    root   /var/gogs/hexo-blog; // 宿主真实路径
     index  index.html index.htm;
     try_files $uri $uri/ /index.html;
 &#125;</code></pre>
