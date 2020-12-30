@@ -11,6 +11,12 @@
         <content type="html"><![CDATA[<ol><li>btoa() 方法用于创建一个 base-64 编码的字符串。<br>该方法使用 “A-Z”, “a-z”, “0-9”, “+”, “/“ 和 “=” 字符来编码字符串。</li><li>base-64 解码使用方法是 atob() 。</li></ol>]]></content>
       
       
+      <categories>
+          
+          <category> Javascript </category>
+          
+      </categories>
+      
       
         <tags>
             
@@ -54,6 +60,12 @@
       
         <content type="html"><![CDATA[<ol><li>mapState 不生效问题<br>mapState 只能映射 store 的根状态树，modules 内的状态不映射</li></ol>]]></content>
       
+      
+      <categories>
+          
+          <category> Javascript </category>
+          
+      </categories>
       
       
         <tags>
@@ -124,6 +136,12 @@
         <content type="html"><![CDATA[<ol><li>冒泡排序</li></ol><pre><code>function sort(arr)&#123;  for(let i = 0; i &amp;lt;arr.length - 1; i++) &#123;    for(let j = 0; j &amp;lt;arr.length - i - 1; j++) &#123;      if(arr[j] &amp;gt; arr[j + 1]) &#123;        const temp = arr[j];        arr[j] = arr[j + 1];        arr[j + 1] = temp;      &#125;    &#125;  &#125;&#125;</code></pre><ol start="2"><li>快速排序</li></ol><pre><code>function quickSort(arr)&#123;  if(arr.length &lt;= 1 ) &#123;    return arr;  &#125;  const pivotIndex = Math.floor(arr.length / 2);  const pivot = arr.splice(pivotIndex, 1)[0];  const left = [];  const right = [];  for(let i = 0; i &lt; arr.length; i++) &#123;    if(arr[i] &lt; pivot) &#123;      left.push(arr[i])    &#125; else &#123;      right.push(arr[i])    &#125;  &#125;  return [...quickSort(left), pivot, ...quickSort(right)];&#125;</code></pre><ol start="3"><li>Array.sort</li></ol><pre><code>arr.sort((a, b) =&gt; b - a)</code></pre><ol start="4"><li>一层的json数组排序</li></ol><pre><code>// Array.sortarr.sort((a, b) =&gt; b.key - a.key)// 快速排序arr：需要排序的json数组atrr:按元素key排序function quickSort(arr: any, atrr: string): any &#123;  if (arr.length &lt;= 1) &#123;    return arr  &#125;  const pivotIndex = Math.floor(arr.length / 2)  const pivot = arr.splice(pivotIndex, 1)[0]  const left: any = []  const right: any = []  for (let i = 0; i &lt; arr.length; i++) &#123;    if (arr[i][atrr] &lt; pivot[atrr]) &#123;      left.push(arr[i])    &#125; else &#123;      right.push(arr[i])    &#125;  &#125;  return [...quickSort(left, atrr), pivot, ...quickSort(right, atrr)]&#125;</code></pre>]]></content>
       
       
+      <categories>
+          
+          <category> Javascript </category>
+          
+      </categories>
+      
       
         <tags>
             
@@ -142,6 +160,12 @@
       
         <content type="html"><![CDATA[<p>rem 是相对于根元素的字体大小的单位<br>根据设计稿参照<br>如 iPhone6 375x667</p><p>屏幕宽为 100vw<br>1vw=375px/100=3.75px<br>100px/3.75=26.67;<br>26.67vw = 100px = 1rem<br>设计稿一般为 750px 则<br>html 根元素设置 font-size</p><pre><code>html&#123;  font-size:13.33vw;&#125;</code></pre><p>页面使用时将设计稿的像素值/100=rem 数值</p>]]></content>
       
+      
+      <categories>
+          
+          <category> Html </category>
+          
+      </categories>
       
       
         <tags>
@@ -261,6 +285,12 @@
       
         <content type="html"><![CDATA[<ol><li><p>window<br>表示浏览器的窗口。<br>有 innerWidth 和 innerHeight 这两个属性。可以获取浏览器的内部宽高。<br>window.innerWidth;<br>window.innerHeight;<br>对应的还有 outWidth 和 outHeight 这两个属性，获取浏览器窗口的整体的宽高。<br>window.outerWidth;<br>window.outerHeight;</p></li><li><p>navigator<br>表示浏览器信息。<br>navigator.appName:浏览器名称；<br>navigator.appVersion:浏览器版本<br>navigator.language:浏览器设置的语言<br>navigator.platform：操作系统类型；<br>navigator.userAgent:浏览器设定的 Use-Agent 字符串</p></li><li><p>screen<br>表示屏幕信息。<br>screen.width; //屏幕宽度<br>screen.height; //屏幕宽度<br>screen.colorDepth; //颜色位数</p></li><li><p>location<br>表示当前页面的 URL 信息。<br>location.href; //获取当前页面 URL 整体信息</p></li><li><p>document<br>表示当前的页面信息。<br>还可以获取当前页面的 Cookie 信息。<br>document.cookie;</p></li><li><p>history<br>表示页面的历史纪录。<br>但在任何情况下不使用该对象。</p></li></ol>]]></content>
       
+      
+      <categories>
+          
+          <category> Javascript </category>
+          
+      </categories>
       
       
         <tags>
