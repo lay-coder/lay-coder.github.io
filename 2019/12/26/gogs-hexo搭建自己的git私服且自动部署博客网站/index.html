@@ -386,7 +386,7 @@ chown –R git:git /usr/local/nginx/hexo-blog
 
 #!/bin/bash
 unset $(git rev-parse --local-env-vars);
-cd /usr/local/nginx/hexo-blog/;
+cd /data/hexo-blog/; // 容器内的路径
 git pull;</code></pre>
 <h5 id="测试钩子是否生效"><a href="#测试钩子是否生效" class="headerlink" title="测试钩子是否生效"></a>测试钩子是否生效</h5><pre><code>cd /var/gogs/git/gogs-repositories/zhangnan/hexo-blog.git/custom_hooks/
 [root@VM-0-11-centos custom_hooks]# ls
@@ -419,16 +419,11 @@ ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!
 ssl_prefer_server_ciphers  on;
 
 location / &#123;
-    root   hexo-blog;
+    root   /var/gogs/hexo-blog; // 真实路径
     index  index.html index.htm;
     try_files $uri $uri/ /index.html;
 &#125;</code></pre>
-<h5 id="后续本地发布时，自动部署到自己的目录下"><a href="#后续本地发布时，自动部署到自己的目录下" class="headerlink" title="后续本地发布时，自动部署到自己的目录下"></a>后续本地发布时，自动部署到自己的目录下</h5><h5 id="gogs-git-钩子出错时"><a href="#gogs-git-钩子出错时" class="headerlink" title="gogs git 钩子出错时"></a>gogs git 钩子出错时</h5><pre><code>vim /var/gogs/gogs/log/hooks/post-receive.log
-//我的日志
-[ERROR] [...ogs.io/gogs/internal/cmd/serv.go:47 fail()] Failed to execute custom post-receive
-hook: exit status 128
-//难为到至今没解决</code></pre>
-
+<h5 id="后续本地发布时，自动部署到自己的目录下"><a href="#后续本地发布时，自动部署到自己的目录下" class="headerlink" title="后续本地发布时，自动部署到自己的目录下"></a>后续本地发布时，自动部署到自己的目录下</h5>
                 
             </div>
             <hr/>
