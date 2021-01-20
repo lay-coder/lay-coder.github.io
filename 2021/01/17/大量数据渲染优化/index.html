@@ -368,7 +368,7 @@
                 <h5 id="项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，"><a href="#项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，" class="headerlink" title="项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，"></a>项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，</h5><p>最后根据只渲染少数可视范围内的元素的思路</p>
 <pre><code>&lt;div @scroll=&quot;newMessageListScroll&quot;&gt;
     &lt;div :style=&quot;&#123;height: trueHeight + &#39;px&#39;&#125;&quot;&gt;
-        // key设置为index，diff算法不会销毁创建新的元素
+        // key设置为index时diff算法不会销毁创建外部元素
         &lt;li v-for&quot;(item, index) in showNewMessageList :key=&quot;index&quot;
             .slice(lazyFirstIndex,lazyFirstIndex + lazyShowNumber)&quot;
             :style=&quot;&#123; transform: `translateY($&#123;lazyFirstIndex * itemHeight&#125;px)` &#125;&quot;
