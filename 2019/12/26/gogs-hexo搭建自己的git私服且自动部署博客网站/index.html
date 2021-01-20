@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="gogs+hexo搭建自己的git私服且自动部署博客网站, 个人博客,个人网站,www.laycoder.com,laycoder,楠神嘚儿驾">
+    <meta name="keywords" content="gogs+hexo搭建自己的git私服且自动部署博客网站, 楠神,laycoder,个人博客,个人网站,www.laycoder.com,楠神嘚儿驾">
     <meta name="description" content="laycoder.com，前端哒哒哒哒哒哒哒">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -369,59 +369,59 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 docker"></a>安装 docker</h5><pre><code>    # 通过yum源安装docker
-    yum -y install docker
-    # 启动docker
-    systemctl start docker
-    # 开机自启
-    sudo systemctl enable docker</code></pre>
-<h5 id="下载-gogs-的-docker-镜像"><a href="#下载-gogs-的-docker-镜像" class="headerlink" title="下载 gogs 的 docker 镜像"></a>下载 gogs 的 docker 镜像</h5><pre><code>    docker pull gogs/gogs</code></pre>
-<h5 id="创建-gogs-存储的目录"><a href="#创建-gogs-存储的目录" class="headerlink" title="创建 gogs 存储的目录"></a>创建 gogs 存储的目录</h5><pre><code>    mkdir -p /var/gogs</code></pre>
-<h5 id="运行镜像-产生容器"><a href="#运行镜像-产生容器" class="headerlink" title="运行镜像, 产生容器"></a>运行镜像, 产生容器</h5><pre><code>    docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs</code></pre>
-<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><pre><code>    通过浏览器访问公网 ip 地址:10080</code></pre>
-<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>    // 给git用户权限
-    chown –R git:git /usr/local/nginx/hexo-blog
+                <h5 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 docker"></a>安装 docker</h5><pre><code># 通过yum源安装docker
+yum -y install docker
+# 启动docker
+systemctl start docker
+# 开机自启
+sudo systemctl enable docker</code></pre>
+<h5 id="下载-gogs-的-docker-镜像"><a href="#下载-gogs-的-docker-镜像" class="headerlink" title="下载 gogs 的 docker 镜像"></a>下载 gogs 的 docker 镜像</h5><pre><code>docker pull gogs/gogs</code></pre>
+<h5 id="创建-gogs-存储的目录"><a href="#创建-gogs-存储的目录" class="headerlink" title="创建 gogs 存储的目录"></a>创建 gogs 存储的目录</h5><pre><code>mkdir -p /var/gogs</code></pre>
+<h5 id="运行镜像-产生容器"><a href="#运行镜像-产生容器" class="headerlink" title="运行镜像, 产生容器"></a>运行镜像, 产生容器</h5><pre><code>docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs</code></pre>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><pre><code>通过浏览器访问公网 ip 地址:10080</code></pre>
+<h5 id="注册登录后创建新仓库"><a href="#注册登录后创建新仓库" class="headerlink" title="注册登录后创建新仓库"></a>注册登录后创建新仓库</h5><pre><code>并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
 
-    并在仓库设置内→管理Git钩子→post-receiven，改动后更新钩子设置
+#!/bin/bash
+unset $(git rev-parse --local-env-vars);
+cd /data/hexo-blog/; // 容器内的路径
+git pull;</code></pre>
+<h5 id="测试钩子是否生效"><a href="#测试钩子是否生效" class="headerlink" title="测试钩子是否生效"></a>测试钩子是否生效</h5><pre><code>cd /var/gogs/git/gogs-repositories/zhangnan/hexo-blog.git/custom_hooks/
+[root@VM-0-11-centos custom_hooks]# ls
+post-receive
+[root@VM-0-11-centos custom_hooks]# ./post-receive</code></pre>
+<h5 id="本地-Hexo-项目"><a href="#本地-Hexo-项目" class="headerlink" title="本地 Hexo 项目"></a>本地 Hexo 项目</h5><pre><code>_config.yml内
 
-    unset $(git rev-parse --local-env-vars);
-    cd /usr/local/nginx/hexo-blog
-    git pull origin master</code></pre>
-<h5 id="测试钩子是否生效"><a href="#测试钩子是否生效" class="headerlink" title="测试钩子是否生效"></a>测试钩子是否生效</h5><pre><code>    cd /var/gogs/git/gogs-repositories/zhangnan/hexo-blog.git/custom_hooks/
-    [root@VM-0-11-centos custom_hooks]# ls
-    post-receive
-    [root@VM-0-11-centos custom_hooks]# ./post-receive</code></pre>
-<h5 id="本地-Hexo-项目"><a href="#本地-Hexo-项目" class="headerlink" title="本地 Hexo 项目"></a>本地 Hexo 项目</h5><pre><code>    _config.yml内
+deploy:
+    type: git
+    repo:
+        github: git@github.com:zn-nz/zn-nz.github.io.git
+        laycoder: http://laycoder.com:10080/zhangnan/hexo-blog.git // gogs博客仓库地址
+    branch: master</code></pre>
+<h5 id="上传一次后，到想放的文件夹内-git-clone"><a href="#上传一次后，到想放的文件夹内-git-clone" class="headerlink" title="上传一次后，到想放的文件夹内 git clone"></a>上传一次后，到想放的文件夹内 git clone</h5><pre><code>cd /var/gogs
+git clone http://laycoder.com:10080/zhangnan/hexo-blog.git
+// 给git用户权限
+chown –R git:git /var/gogs/hexo-blog
+git config credential.helper store  // 登录一次后，后续可免密登录
+或在.git下的config内
+[remote &quot;origin&quot;]
+        url = http://&#123;user&#125;:&#123;password&#125;@laycoder.com:10080/zhangnan/hexo-blog.git
+        fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
+<h5 id="正常的-Nginx-web-服务器"><a href="#正常的-Nginx-web-服务器" class="headerlink" title="正常的 Nginx web 服务器"></a>正常的 Nginx web 服务器</h5><pre><code>listen       443 ssl;
+server_name  www.laycoder.com;
+ssl_certificate      1_www.laycoder.com_bundle.crt;
+ssl_certificate_key  2_www.laycoder.com.key;
 
-    deploy:
-        type: git
-        repo:
-            github: git@github.com:zn-nz/zn-nz.github.io.git
-            laycoder: http://laycoder.com:10080/zhangnan/hexo-blog.git // gogs博客仓库地址
-        branch: master</code></pre>
-<h5 id="上传一次后，到想放的文件夹内-git-clone"><a href="#上传一次后，到想放的文件夹内-git-clone" class="headerlink" title="上传一次后，到想放的文件夹内 git clone"></a>上传一次后，到想放的文件夹内 git clone</h5><pre><code>    cd /usr/local/nginx/hexo-blog
-    git clone http://laycoder.com:10080/zhangnan/hexo-blog.git
-    git config credential.helper store  // 登录一次后，后续可免密登录
-    或在.git下的config内
-    [remote &quot;origin&quot;]
-            url = http://&#123;user&#125;:&#123;password&#125;@laycoder.com:10080/zhangnan/hexo-blog.git
-            fetch = +refs/heads/*:refs/remotes/origin/*</code></pre>
-<h5 id="正常的-Nginx-web-服务器"><a href="#正常的-Nginx-web-服务器" class="headerlink" title="正常的 Nginx web 服务器"></a>正常的 Nginx web 服务器</h5><pre><code>    listen       443 ssl;
-    server_name  www.laycoder.com;
-    ssl_certificate      1_www.laycoder.com_bundle.crt;
-    ssl_certificate_key  2_www.laycoder.com.key;
+ssl_session_cache    shared:SSL:1m;
+ssl_session_timeout  5m;
 
-    ssl_session_cache    shared:SSL:1m;
-    ssl_session_timeout  5m;
+ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+ssl_prefer_server_ciphers  on;
 
-    ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
-    ssl_prefer_server_ciphers  on;
-
-    location / &#123;
-        root   hexo-blog;
-        index  index.html index.htm;
-        try_files $uri $uri/ /index.html;
-    &#125;</code></pre>
+location / &#123;
+    root   /var/gogs/hexo-blog; // 宿主真实路径
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+&#125;</code></pre>
 <h5 id="后续本地发布时，自动部署到自己的目录下"><a href="#后续本地发布时，自动部署到自己的目录下" class="headerlink" title="后续本地发布时，自动部署到自己的目录下"></a>后续本地发布时，自动部署到自己的目录下</h5>
                 
             </div>
@@ -560,8 +560,12 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            laycoder
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Javascript/" class="post-category">
+                                    Javascript
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -764,7 +768,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2018-2020</span>
+                <span id="year">2018-2021</span>
             
             <span id="year">2018</span>
             <a href="/about" target="_blank">laycoder</a>

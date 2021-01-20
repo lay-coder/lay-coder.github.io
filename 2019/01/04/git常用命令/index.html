@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="js任务队列模拟, 楠神,laycoder,个人博客,个人网站,www.laycoder.com,楠神嘚儿驾">
+    <meta name="keywords" content="git常用命令, 楠神,laycoder,个人博客,个人网站,www.laycoder.com,楠神嘚儿驾">
     <meta name="description" content="laycoder.com，前端哒哒哒哒哒哒哒">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>js任务队列模拟 | lay coder</title>
+    <title>git常用命令 | lay coder</title>
     <link rel="icon" type="image/png" href="/medias/avatar.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -203,12 +203,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">js任务队列模拟</h1>
+                    <h1 class="description center-align post-title">git常用命令</h1>
                 </div>
             </div>
         </div>
@@ -324,8 +324,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">
-                                <span class="chip bg-color">面试题</span>
+                            <a href="/tags/Git/">
+                                <span class="chip bg-color">Git</span>
                             </a>
                         
                     </div>
@@ -336,8 +336,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/JavaScript/" class="post-category">
-                                JavaScript
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                工具
                             </a>
                         
                     </div>
@@ -349,7 +349,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-12-26
+                    2019-01-04
                 </div>
                 
 
@@ -370,57 +370,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p>
-<p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p>
-<pre><code>    class TaskQueue &#123;
-        #count;
-        #taskList = [];
-        #waitList = [];
-        constructor(count) &#123;
-            this.#count = count;
-            setTimeout(this.#runTask.bind(this), 0);
-        &#125;
-        subscribe(task) &#123;
-            if (this.#check()) &#123;
-                this.#taskList.push(task);
-            &#125; else &#123;
-                this.#waitList.push(task);
-            &#125;
-        &#125;
-        #check() &#123;
-            return this.#taskList.length &lt; this.#count;
-        &#125;
-        #runTask() &#123;
-            if (this.#taskList.length === 0) return;
-            this.#taskList.forEach((i) =&gt; &#123;
-                try &#123;
-                    const task = this.#taskList.shift();
-                    task().then((value) =&gt; &#123;
-                        console.log(value);
-                    &#125;);
-                &#125; finally &#123;
-                    this.#moveTask();
-                    this.#runTask();
-                &#125;
-            &#125;);
-        &#125;
-        #moveTask() &#123;
-            if (this.#waitList.length === 0) return;
-            this.#taskList.push(this.#waitList.shift());
-        &#125;
-    &#125;
-    // 测试下
-    const taskQueue = new TaskQueue(2);
-    const task = (index) =&gt; &#123;
-        return new Promise((resolve, reject) =&gt; &#123;
-            setTimeout(() =&gt; &#123;
-                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);
-            &#125;, 2000)
-        &#125;);
-    &#125;;
-    for (let index = 0; index &lt; 8; index++) &#123;
-        taskQueue.subscribe(task.bind(this, index));
-    &#125;</code></pre>
+                <h5 id="查看、添加、提交、删除、找回、重置修改文件"><a href="#查看、添加、提交、删除、找回、重置修改文件" class="headerlink" title="查看、添加、提交、删除、找回、重置修改文件"></a>查看、添加、提交、删除、找回、重置修改文件</h5><p>显示 command 的 help<br>git help &lt;command&gt;<br>显示某次提交的内容 git show $id<br>git show<br>抛弃工作区修改<br>git checkout – &lt;file&gt;&gt;<br>抛弃工作区修改<br>git checkout .<br>将工作文件修改提交到本地缓存区<br>git add &lt;file&gt;<br>将所有修改过的工作文件提交缓存区<br>git add .<br>从版本库中删除文件<br>git rm &lt;file&gt;<br>从版本库中删除文件,但不删除文件<br>git rm &lt;file&gt; –cached<br>从暂存区恢复到工作文件<br>git reset &lt;file&gt;<br>从暂存区恢复但工作文件<br>git reset – .<br>回复最近一次提交过的状态，即放弃上次提交后的所有修改<br>git reset –hard<br>提交已经跟踪过的修改<br>git commit -am “some comments”<br>修改最后一次提交记录<br>git commit –amend<br>将 git add,git rm 和 git commit 等操作都合并在一起做<br>git commit &lt;file&gt; git commit . git commit -a<br>恢复某次提交的状态，恢复动作本身也创建次提交对象<br>git revert &lt;$id&gt;<br>恢复最后一次提交的状态<br>git revert HEAD</p>
+<h5 id="git-本地分支管理"><a href="#git-本地分支管理" class="headerlink" title="git 本地分支管理"></a>git 本地分支管理</h5><p>查看远程分支<br>git branch -r<br>查看所有分支<br>git branch -a<br>创建新的分支<br>git branch &lt;branch&gt;<br>查看各个分支最后提交信息<br>git branch -v<br>查看已经被合并到当前分支的分支<br>git branch –merged<br>查看尚未被合并到当前分支的分支<br>git branch –no-merged<br>切换到某个分支<br>git checkout &lt;branch&gt;<br>创建新的分支，并且切换过去<br>git checkout -b &lt;branch&gt;<br>基于 branch 创建新的 new_branch<br>git checkout -b &lt;new_branch&gt; &lt;branch&gt;<br>把某次历史提交记录 checkout 出来，但无分支信息，切换到其他分支会自动删除<br>git checkout $id<br>把某次历史提交记录 checkout 出来，创建一个分支<br>git checkout $id -b &lt;branch&gt;<br>删除某个分支<br>git branch -d &lt;branch&gt;<br>强制删除某个分支（未被合并的分支被删除的时候需要强制）<br>git branch -D &lt;branch&gt;</p>
+<h5 id="分支合并和-rebase"><a href="#分支合并和-rebase" class="headerlink" title="分支合并和 rebase"></a>分支合并和 rebase</h5><p>将 branch 分支合并到当前分支<br>git merge &lt;branch&gt;<br>不要 fast-foward 合并，这样可以生成 merge 提交<br>git merge origin/master –no-ff<br>将 master rebase 到 branch<br>git rebase master &lt;branch&gt;<br>git checkout &lt;branch&gt; &amp;&amp; git rebase master &amp;&amp; git checkout master &amp;&amp; git merge &lt;branch&gt;<br>合并冲突全部选择他们的版本<br>git merge –strategy-option theirs<br>合并冲突全部选择我们的版本<br>git merge –strategy-option ours</p>
+<h5 id="git-远程分支管理"><a href="#git-远程分支管理" class="headerlink" title="git 远程分支管理"></a>git 远程分支管理</h5><p>抓取远程仓库所有分支更新并合并到本地<br>git pull<br>抓取远程仓库所有分支更新并合并到本地，不要快速合并<br>git pull –no-ff<br>抓取远程仓库更新<br>git fetch origin<br>将远程主分支合并到本地当前分支<br>git merge origin/master<br>跟踪某个远程分支创建相应的本地分支<br>git checkout –track origin/branch<br>基于远程分支创建本地分支<br>git checkout -b &lt;local_branch&gt; origin/&lt;remote_branch&gt;<br>push 所有分支<br>git push<br>将本地主分支推到远程主分支<br>git push origin master<br>将本地主分支推到远程未创建的分支<br>git push -u origin master<br>创建远程分支，origin 是远程仓库代称<br>git push origin &lt;local_branch&gt;<br>创建远程分支<br>git push origin &lt;local_branch&gt;:&lt;remote_branch&gt;<br>先删除本地分支（git branch -d &lt;branch&gt;)，然后再 push 删除远程分支<br>git push origin:&lt;remote_branch&gt;</p>
+<h5 id="git-远程仓库管理"><a href="#git-远程仓库管理" class="headerlink" title="git 远程仓库管理"></a>git 远程仓库管理</h5><p>查看远程服务器地址和仓库代称<br>git remote -v<br>查看远程服务器仓库状态<br>git remote show origin<br>添加远程仓库地址<br>git remote add origin &lt;url&gt;<br>设置远程仓库地址<br>git remote set-url origin &lt;url&gt;<br>删除远程仓库<br>git remote rm &lt;仓库代称&gt;</p>
+<h5 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h5><p>设置远程仓库的 HEAD 指向 master 分支<br>git remote set-head origin master<br>设置本地库跟踪远程库<br>git branch –set-upstream master origin/master</p>
+<h5 id="查看文件-diff"><a href="#查看文件-diff" class="headerlink" title="查看文件 diff"></a>查看文件 diff</h5><p>比较当前文件和暂存区文件差异<br>git diff &lt;file&gt;<br>比较两次提交之间的差异<br>git diff &lt;id1&gt; &lt;id2&gt;<br>在两个分支之间比较<br>git diff &lt;branch1&gt; &lt;branch2&gt;<br>比较暂存区和版本库差异<br>git diff –staged<br>git diff –cached<br>仅仅比较统计信息<br>git diff –stat</p>
+<h5 id="查看提交记录"><a href="#查看提交记录" class="headerlink" title="查看提交记录"></a>查看提交记录</h5><p>查看该文件每次提交记录<br>git log &lt;file&gt;<br>查看每次详细修改内容的 diff<br>git log -p &lt;file&gt;<br>查看最近两次详细修改内容的 diff<br>git log -p -2<br>查看提交统计信息<br>git log –stat</p>
+<h5 id="git-补丁管理（方便在多台机器上开发同步时-用）"><a href="#git-补丁管理（方便在多台机器上开发同步时-用）" class="headerlink" title="git 补丁管理（方便在多台机器上开发同步时 用）"></a>git 补丁管理（方便在多台机器上开发同步时 用）</h5><p>生成补丁<br>git diff &gt; ../sync.patch<br>打补丁<br>git apply ../sync.patch<br>测试补丁能否成功<br>git apply –check ../sync.patch</p>
+<h5 id="git-暂存管理"><a href="#git-暂存管理" class="headerlink" title="git 暂存管理"></a>git 暂存管理</h5><p>暂存<br>git stash<br>列出所有 stash<br>git stash list<br>恢复暂存的内容<br>git stash apply<br>删除暂存区<br>git stash drop</p>
 
                 
             </div>
@@ -435,8 +394,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">
-                                    <span class="chip bg-color">面试题</span>
+                                <a href="/tags/Git/">
+                                    <span class="chip bg-color">Git</span>
                                 </a>
                             
                         </div>
@@ -481,13 +440,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/12/28/Window%E5%AF%B9%E8%B1%A1/">
+                <a href="/2019/01/20/Linux%E5%AE%89%E8%A3%85nvm/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Window对象">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Linux上安装nvm">
                         
-                        <span class="card-title">Window对象</span>
+                        <span class="card-title">Linux上安装nvm</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -498,8 +457,57 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-12-28
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-01-20
                         </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    工具
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/nvm/">
+                        <span class="chip bg-color">nvm</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/12/28/%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BF%A1%E6%81%AF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="浏览器信息">
+                        
+                        <span class="card-title">浏览器信息</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2018-12-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -517,59 +525,6 @@
                     
                     <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">
                         <span class="chip bg-color">浏览器</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/12/22/vuex%E9%9A%8F%E8%AE%B0/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="vuex随记">
-                        
-                        <span class="card-title">vuex随记</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-12-22
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Javascript/" class="post-category">
-                                    Javascript
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
-                        <span class="chip bg-color">笔记</span>
-                    </a>
-                    
-                    <a href="/tags/vuex/">
-                        <span class="chip bg-color">vuex</span>
                     </a>
                     
                 </div>

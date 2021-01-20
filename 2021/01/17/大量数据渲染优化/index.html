@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="js任务队列模拟, 楠神,laycoder,个人博客,个人网站,www.laycoder.com,楠神嘚儿驾">
+    <meta name="keywords" content="大量数据渲染优化, 楠神,laycoder,个人博客,个人网站,www.laycoder.com,楠神嘚儿驾">
     <meta name="description" content="laycoder.com，前端哒哒哒哒哒哒哒">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>js任务队列模拟 | lay coder</title>
+    <title>大量数据渲染优化 | lay coder</title>
     <link rel="icon" type="image/png" href="/medias/avatar.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -208,7 +208,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">js任务队列模拟</h1>
+                    <h1 class="description center-align post-title">大量数据渲染优化</h1>
                 </div>
             </div>
         </div>
@@ -324,23 +324,18 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">
-                                <span class="chip bg-color">面试题</span>
+                            <a href="/tags/JavaScript/">
+                                <span class="chip bg-color">JavaScript</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%BC%98%E5%8C%96/">
+                                <span class="chip bg-color">优化</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/JavaScript/" class="post-category">
-                                JavaScript
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -349,7 +344,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-12-26
+                    2021-01-17
                 </div>
                 
 
@@ -370,57 +365,35 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="朋友遇到一个面试题，让我试试，所以我试了下"><a href="#朋友遇到一个面试题，让我试试，所以我试了下" class="headerlink" title="朋友遇到一个面试题，让我试试，所以我试了下"></a>朋友遇到一个面试题，让我试试，所以我试了下</h5><p>实现一个任务队列，支持 N 个任务同时进行，超过 N 的任务处于等待状态，当一个任务结束时，自动开启等待中的任务(参考一些下载工具的下载任务逻辑)。<br>备注：任务是一个返回值是 Promise 的函数 Task: () =&gt; Promise<any>;</p>
-<p>调用示例：<br>const taskQueue = new TaskQueue(2); // 2 表示只能同时执行两个任务<br>taskQueue.subscribe(task1);<br>taskQueue.subscribe(task2);<br>taskQueue.subscribe(task3);<br>taskQueue.subscribe(task4);</p>
-<pre><code>    class TaskQueue &#123;
-        #count;
-        #taskList = [];
-        #waitList = [];
-        constructor(count) &#123;
-            this.#count = count;
-            setTimeout(this.#runTask.bind(this), 0);
-        &#125;
-        subscribe(task) &#123;
-            if (this.#check()) &#123;
-                this.#taskList.push(task);
-            &#125; else &#123;
-                this.#waitList.push(task);
-            &#125;
-        &#125;
-        #check() &#123;
-            return this.#taskList.length &lt; this.#count;
-        &#125;
-        #runTask() &#123;
-            if (this.#taskList.length === 0) return;
-            this.#taskList.forEach((i) =&gt; &#123;
-                try &#123;
-                    const task = this.#taskList.shift();
-                    task().then((value) =&gt; &#123;
-                        console.log(value);
-                    &#125;);
-                &#125; finally &#123;
-                    this.#moveTask();
-                    this.#runTask();
-                &#125;
-            &#125;);
-        &#125;
-        #moveTask() &#123;
-            if (this.#waitList.length === 0) return;
-            this.#taskList.push(this.#waitList.shift());
-        &#125;
+                <h5 id="项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，"><a href="#项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，" class="headerlink" title="项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，"></a>项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，</h5><p>最后根据只渲染少数可视范围内的元素的思路</p>
+<pre><code>&lt;div @scroll=&quot;newMessageListScroll&quot;&gt;
+    &lt;div :style=&quot;&#123;height: trueHeight + &#39;px&#39;&#125;&quot;&gt;
+        // key设置为index，diff算法不会销毁创建新的元素
+        &lt;li v-for&quot;(item, index) in showNewMessageList :key=&quot;index&quot;
+            .slice(lazyFirstIndex,lazyFirstIndex + lazyShowNumber)&quot;
+            :style=&quot;&#123; transform: `translateY($&#123;lazyFirstIndex * itemHeight&#125;px)` &#125;&quot;
+        &gt;&lt;/li&gt;
+        ...
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>定义父元素高度</p>
+<pre><code>data()&#123;
+    return&#123;
+        trueHeight：0 // 父元素真实高度
+        lazyFirstIndex: 0 // 显示的首个元素的下标
+        lazyShowNumber: 20 // 显示数量
+        itemHeight:64 // 子元素高度
     &#125;
-    // 测试下
-    const taskQueue = new TaskQueue(2);
-    const task = (index) =&gt; &#123;
-        return new Promise((resolve, reject) =&gt; &#123;
-            setTimeout(() =&gt; &#123;
-                resolve(`task：$&#123;index&#125;，$&#123;new Date().getTime()&#125;`);
-            &#125;, 2000)
-        &#125;);
-    &#125;;
-    for (let index = 0; index &lt; 8; index++) &#123;
-        taskQueue.subscribe(task.bind(this, index));
-    &#125;</code></pre>
+&#125;</code></pre>
+<p>初始化时</p>
+<pre><code>this.lazyShowNumber = Math.ceil(window.innerHeight / itemHeight);</code></pre>
+<p>初始化和更新消息列表时</p>
+<pre><code>this.trueHeight = messageList.length * itemHeight; // height为子元素的高度</code></pre>
+<p>滚动消息列表时调用</p>
+<pre><code>newMessageListScroll()&#123;
+  const &#123; scrollTop &#125; = e.target;
+  this.lazyFirstIndex = Math.floor(scrollTop / itemHeight);
+&#125;</code></pre>
 
                 
             </div>
@@ -435,8 +408,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">
-                                    <span class="chip bg-color">面试题</span>
+                                <a href="/tags/JavaScript/">
+                                    <span class="chip bg-color">JavaScript</span>
+                                </a>
+                            
+                                <a href="/tags/%E4%BC%98%E5%8C%96/">
+                                    <span class="chip bg-color">优化</span>
                                 </a>
                             
                         </div>
@@ -477,9 +454,60 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/01/17/%E5%A4%A7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="大量数据渲染优化">
+                        
+                        <span class="card-title">大量数据渲染优化</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-01-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            laycoder
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/JavaScript/">
+                        <span class="chip bg-color">JavaScript</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%BC%98%E5%8C%96/">
+                        <span class="chip bg-color">优化</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2020/12/28/Window%E5%AF%B9%E8%B1%A1/">
                     <div class="card-image">
@@ -497,9 +525,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-12-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-12-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -517,59 +545,6 @@
                     
                     <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">
                         <span class="chip bg-color">浏览器</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/12/22/vuex%E9%9A%8F%E8%AE%B0/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="vuex随记">
-                        
-                        <span class="card-title">vuex随记</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-12-22
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Javascript/" class="post-category">
-                                    Javascript
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
-                        <span class="chip bg-color">笔记</span>
-                    </a>
-                    
-                    <a href="/tags/vuex/">
-                        <span class="chip bg-color">vuex</span>
                     </a>
                     
                 </div>
