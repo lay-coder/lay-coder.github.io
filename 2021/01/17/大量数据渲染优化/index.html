@@ -394,7 +394,7 @@
   const &#123; scrollTop &#125; = e.target;
   this.lazyFirstIndex = Math.floor(scrollTop / itemHeight);
 &#125;</code></pre>
-<p>继续封装为简单的 vue 组件<br>long-list/index.vue</p>
+<p>利用作用域插槽继续封装为简单的 vue 组件<br>long-list/index.vue</p>
 <pre><code>    &lt;template&gt;
         &lt;div id=&quot;long-list&quot; class=&quot;long-list&quot; @scroll=&quot;longListScroll&quot;&gt;
             &lt;div :style=&quot;&#123; height: trueHeight + &#39;px&#39; &#125;&quot;&gt;
