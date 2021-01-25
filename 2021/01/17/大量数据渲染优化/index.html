@@ -368,7 +368,8 @@
                 <h5 id="项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，"><a href="#项目需求，消息列表，数量太大，并且是不断更新消息，类似于-QQ-消息列表，可能达到十万条，dom-渲染太多，浏览器卡爆，" class="headerlink" title="项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，"></a>项目需求，消息列表，数量太大，并且是不断更新消息，类似于 QQ 消息列表，可能达到十万条，dom 渲染太多，浏览器卡爆，</h5><p>最后根据只渲染少数可视范围内的元素的思路</p>
 <pre><code>&lt;div @scroll=&quot;newMessageListScroll&quot;&gt;
     &lt;div :style=&quot;&#123;height: trueHeight + &#39;px&#39;&#125;&quot;&gt;
-        &lt;li v-for&quot;(item, index) in showNewMessageList :key=&quot;index&quot; // key设置为index，diff算法不会销毁创建新的元素
+        // key设置为index时diff算法不会销毁创建外部元素
+        &lt;li v-for&quot;(item, index) in showNewMessageList :key=&quot;index&quot;
             .slice(lazyFirstIndex,lazyFirstIndex + lazyShowNumber)&quot;
             :style=&quot;&#123; transform: `translateY($&#123;lazyFirstIndex * itemHeight&#125;px)` &#125;&quot;
         &gt;&lt;/li&gt;
@@ -393,6 +394,87 @@
   const &#123; scrollTop &#125; = e.target;
   this.lazyFirstIndex = Math.floor(scrollTop / itemHeight);
 &#125;</code></pre>
+<p>继续封装为简单的 vue 组件<br>long-list/index.vue</p>
+<pre><code>    &lt;template&gt;
+        &lt;div id=&quot;long-list&quot; class=&quot;long-list&quot; @scroll=&quot;longListScroll&quot;&gt;
+            &lt;div :style=&quot;&#123; height: trueHeight + &#39;px&#39; &#125;&quot;&gt;
+            &lt;div :style=&quot;&#123; transform: `translateY($&#123;firstIndex * itemHeight&#125;px)` &#125;&quot;&gt;
+                &lt;slot
+                v-bind:data=&quot;dataArray.slice(firstIndex, firstIndex + showNumber)&quot;
+                &gt;&lt;/slot&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/template&gt;
+
+    &lt;script&gt;
+    export default &#123;
+    props: &#123;
+        dataArray: &#123;
+        type: Array,
+        default: () =&gt; [],
+        &#125;,
+        itemHeight: &#123;
+        type: Number,
+        default: () =&gt; 0,
+        &#125;,
+    &#125;,
+    computed: &#123;
+        trueHeight() &#123;
+        return this.itemHeight * this.dataArray.length;
+        &#125;,
+    &#125;,
+    data() &#123;
+        return &#123;
+        firstIndex: 0,
+        showNumber: 20,
+        &#125;;
+    &#125;,
+    mounted() &#123;
+        this.init();
+    &#125;,
+    activated() &#123;
+        this.firstIndex = 0;
+    &#125;,
+    methods: &#123;
+        init() &#123;
+        const scrollDom = document.querySelector(&#39;#long-list&#39;);
+        const &#123; clientHeight &#125; = scrollDom;
+        this.showNumber = Math.ceil(clientHeight / this.itemHeight) + 4;
+        &#125;,
+        longListScroll(e) &#123;
+        const &#123; scrollTop &#125; = e.target;
+        this.firstIndex = Math.floor(scrollTop / this.itemHeight);
+        &#125;,
+    &#125;,
+    &#125;;
+    &lt;/script&gt;
+
+    &lt;style lang=&quot;scss&quot; scoped&gt;
+    .long-list &#123;
+    height: 100%;
+    overflow: auto;
+    &#125;
+    &lt;/style&gt;</code></pre>
+<p>调用时</p>
+<pre><code>&lt;long-list
+    v-if=&quot;isShowNewMessageList&quot;
+    class=&quot;user-list-container&quot;
+    :dataArray=&quot;showNewMessageList&quot;
+    :itemHeight=&quot;64&quot;
+&gt;
+    &lt;template v-slot=&quot;&#123; data &#125;&quot;&gt;
+        &lt;new-message-item
+            v-for=&quot;(item, index) in data&quot;
+            :key=&quot;index&quot; // 是用每条的id呢还是用index减少dom销毁新建，看自己
+            :data=&quot;item&quot;
+            :message-key=&quot;item.messageKey&quot;
+            :new-message-num=&quot;getNewMessageNum(item.messageKey)&quot;
+            class=&quot;pointer&quot;
+            @click.native=&quot;onClickItem(index, item.messageKey)&quot;
+        /&gt;
+    &lt;/template&gt;
+&lt;/long-list&gt;</code></pre>
 
                 
             </div>
