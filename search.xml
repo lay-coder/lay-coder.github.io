@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>nginx禁止特定文件缓存</title>
+      <link href="2021/06/28/nginx%E7%A6%81%E6%AD%A2%E7%89%B9%E5%AE%9A%E6%96%87%E4%BB%B6%E7%BC%93%E5%AD%98/"/>
+      <url>2021/06/28/nginx%E7%A6%81%E6%AD%A2%E7%89%B9%E5%AE%9A%E6%96%87%E4%BB%B6%E7%BC%93%E5%AD%98/</url>
+      
+        <content type="html"><![CDATA[<h4 id="比如-Vue-项目有一些静态文件，在服务器更新后，客户端有缓存，未能拉取到新的内容"><a href="#比如-Vue-项目有一些静态文件，在服务器更新后，客户端有缓存，未能拉取到新的内容" class="headerlink" title="比如 Vue 项目有一些静态文件，在服务器更新后，客户端有缓存，未能拉取到新的内容"></a>比如 Vue 项目有一些静态文件，在服务器更新后，客户端有缓存，未能拉取到新的内容</h4><pre><code>        location / &#123;            if ($request_filename ~* .*\.(?:htm|html|json)$)&#123;                add_header Cache-Control &quot;private, no-store, no-cache, must-revalidate, proxy-revalidate&quot;;            &#125;            root   hp_wifi_prod;            index  index.html index.htm;            try_files $uri $uri/ /index.html;        &#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>生成tree数据结构</title>
       <link href="2021/04/14/%E7%94%9F%E6%88%90tree%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
       <url>2021/04/14/%E7%94%9F%E6%88%90tree%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
